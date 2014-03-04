@@ -1,0 +1,7 @@
+data_loading: off
+cache_loading: on
+munging: on
+logging: off
+load_libraries: on
+libraries: reshape, plyr, ggplot2, stringr, lubridate, devtools, blastr, metaR, biofiles, ncbi, reutils, rmisc, RSQLite, XML, biom, assertthat, iterators, foreach, doParallel, phyloseq
+data_tables: off

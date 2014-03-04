@@ -1,0 +1,13 @@
+source("src/metadata.R")
+
+sample60 <- taxonomyReportDBConnect("data/taxonomyDB/sample60_bac.db", metadata60) 
+sample62 <- taxonomyReportDBConnect("data/taxonomyDB/sample62_bac.db", metadata62) 
+sample64 <- taxonomyReportDBConnect("data/taxonomyDB/sample64_bac.db", metadata64) 
+sample66 <- taxonomyReportDBConnect("data/taxonomyDB/sample66_bac.db", metadata66) 
+sample68 <- taxonomyReportDBConnect("data/taxonomyDB/sample68_bac.db", metadata68) 
+sample70 <- taxonomyReportDBConnect("data/taxonomyDB/sample70_bac.db", metadata70) 
+sample74 <- taxonomyReportDBConnect("data/taxonomyDB/sample74_bac.db", metadata74) 
+sample76 <- taxonomyReportDBConnect("data/taxonomyDB/sample76_bac.db", metadata76) 
+sample78 <- taxonomyReportDBConnect("data/taxonomyDB/sample78_bac.db", metadata78) 
+sample80 <- taxonomyReportDBConnect("data/taxonomyDB/sample80_bac.db", metadata80) 
+sample82 <- taxonomyReportDBConnect("data/taxonomyDB/sample82_bac.db", metadata82) 
