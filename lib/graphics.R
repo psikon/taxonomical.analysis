@@ -20,4 +20,8 @@ plot_overview_bar <- function(phyloseq, level, seperator = NULL, group_by = NULL
     bar= p + eval(parse(text=geom))
     bar
 }
-
+sd <- sample_data(phylum)
+class(sd@row.names) <- as.factor(sd@row.names)
+sd
+plot_bar(phylum,facet_grid=~Environment)
+p$labels
