@@ -5,7 +5,7 @@ registerDoParallel(cores=20)
 
 path <- generateBiomFile("bacterial")
 phylo <- generatePhyloseq("bacterial")
-
+class(phylo@sam_data$SampleName)
 # subset the phyloseq object based on taxonomy expressions
 euk <- subset_taxa(phylo, superkingdom == "k__Eukaryota")
 fun <- subset_taxa(phylo, phylum == "p__Opisthokonta")

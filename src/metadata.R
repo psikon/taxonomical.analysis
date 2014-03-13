@@ -4,7 +4,7 @@
 
 
 metadata60 <- list(
-    SampleId = "fl_60", SampleName = "ef_free_60",
+    SampleId = 60, SampleName = "ef_free_60",
     BarcodeSequence = "TACACGATCTAC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 300,
@@ -12,7 +12,7 @@ metadata60 <- list(
 )
 
 metadata62 <- list(
-    SampleId = "fl_62", SampleName = "ef_free_62",
+    SampleId = 62, SampleName = "ef_free_62",
     BarcodeSequence = "CACGCCATAATG", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 330,
@@ -21,7 +21,7 @@ metadata62 <- list(
 
 ##
 metadata64 <- list(
-    SampleId = "fl_64", SampleName = "ef_free_64",
+    SampleId = 64, SampleName = "ef_free_64",
     BarcodeSequence = "GGATCGCAGATC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 187,
@@ -29,7 +29,7 @@ metadata64 <- list(
 )
 
 metadata66 <- list(
-    SampleId = "fl_66", SampleName = "ef_free_66",
+    SampleId = 66, SampleName = "ef_free_66",
     BarcodeSequence = "AGCTGTTGTTTG", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 330,
@@ -37,7 +37,7 @@ metadata66 <- list(
 )
 
 metadata68 <- list(
-    SampleId = "fl_68", SampleName = "ef_free_68",
+    SampleId = 68, SampleName = "ef_free_68",
     BarcodeSequence = "GCGATATATCGC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 328,
@@ -45,7 +45,7 @@ metadata68 <- list(
 )
 
 metadata70 <- list(
-    SampleId = "ac_70", SampleName = "ef_cage_70",
+    SampleId = 70, SampleName = "ef_cage_70",
     BarcodeSequence = "AATCCGTACAGC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 200,
@@ -53,7 +53,7 @@ metadata70 <- list(
 )
 ##
 metadata74 <- list(
-    SampleId = "ac_74", SampleName = "ef_cage_74",
+    SampleId = 74, SampleName = "ef_cage_74",
     BarcodeSequence = "AGGCTACACGAC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 75,
@@ -61,7 +61,7 @@ metadata74 <- list(
 )
 
 metadata76 <- list(
-    SampleId = "ac_76", SampleName = "ef_cage_76",
+    SampleId = 76, SampleName = "ef_cage_76",
     BarcodeSequence = "GAACCAAAGGAT", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 68,
@@ -69,7 +69,7 @@ metadata76 <- list(
 )
 
 metadata78 <- list(
-    SampleId = "ac_78", SampleName = "ef_cage_78",
+    SampleId = 78, SampleName = "ef_cage_78",
     BarcodeSequence = "GTACATACCGGT", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 140,
@@ -77,7 +77,7 @@ metadata78 <- list(
 )
 
 metadata80 <- list(
-    SampleId = "ac_80", SampleName = "ef_cage_80",
+    SampleId = 80, SampleName = "ef_cage_80",
     BarcodeSequence = "CCAGTGTATGCA", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 190,
@@ -85,7 +85,7 @@ metadata80 <- list(
 )
 
 metadata82 <- list(
-    SampleId = "ac_82", SampleName = "ef_cage_82",
+    SampleId = 82, SampleName = "ef_cage_82",
     BarcodeSequence = "TGAGTCACTGGT", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 138,
