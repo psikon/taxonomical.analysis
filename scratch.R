@@ -3,10 +3,8 @@ load.project()
 Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
 registerDoParallel(cores=20)
 
-phylo <- generateInput(list(sample60, sample62, 
-                            sample66, sample68, sample70, 
-                            sample76, sample78, 
-                            sampl80, sample82), "bacterial")
+taxonomyReports <- generateBiomInput()
+phylo <- generatePhylo(taxonomyReports,"bacterial")
 
 # subset the phyloseq object based on taxonomy expressions
 euk <- subset_taxa(phylo, superkingdom == "k__Eukaryota")
