@@ -2,23 +2,11 @@ library(ProjectTemplate)
 load.project()
 Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
 registerDoParallel(cores=20)
-# get all metadata objects
-source("src/metadata.R")
-# connect to all databses
-source("src/connections.R")
 
-
-# generate biom object from databases and write it to disk
-biom <- to_biom(list(sample60, sample62, 
-                     sample66, sample68, sample70,
-                     sample76, sample78, 
-                     sample80, sample82))
-write_biom(biom, biom_file = "data/bacterial.biom")
-
-# create phyloseq object
-phylo <- import_biom("data/bacterial.biom", parallel = TRUE)
-# adjuxt colnames of the tax_table to map metaR specifications
-colnames(tax_table(phylo)) = c("superkingdom", "phylum", "class", "order", "family", "genus", "species")
+phylo <- generateInput(list(sample60, sample62, 
+                            sample66, sample68, sample70, 
+                            sample76, sample78, 
+                            sampl80, sample82), "bacterial")
 
 # subset the phyloseq object based on taxonomy expressions
 euk <- subset_taxa(phylo, superkingdom == "k__Eukaryota")
