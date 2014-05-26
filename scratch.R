@@ -12,18 +12,12 @@ path <- generateBiomFile("bacterial")
 # init the phyloseq object
 phylo <- generatePhyloseq("bacterial")
 
-<<<<<<< HEAD
-sample_data(phylo)
 
-
-#"genus"
-=======
 #############################################################
 
 #######################
 # General separations #
 #######################
->>>>>>> 1eae0de4d7c27566c192cd382873c8de3c9b949f
 
 # subset the phyloseq object based on taxonomy expressions
 fungi <- subset_taxa(phylo, superkingdom == "k__Eukaryota")
@@ -34,7 +28,6 @@ bakteria <- subset_taxa(phylo, superkingdom == 'k__Bacteria')
 bakteria <- remove_taxa(bakteria, "2")
 bakteria
 
-<<<<<<< HEAD
 merged <- merge_samples(bakteria, group="pool_info")
 pdf("graphs/test.pdf")
     plot_bar(tax_glom(merged,"class"), fill="class")
@@ -49,7 +42,7 @@ pdf("graphs/test.pdf")
     p + facet_wrap(~Environment)
 dev.off()
 plot_overview_bar(phylum,level="phylum",seperator="Environment")
-=======
+
 #############################################################
 
 #############################################
@@ -77,7 +70,7 @@ p + geom_bar(aes(color = phylum, fill = phylum),
 
 dev.off()
 # save otu_table
->>>>>>> 1eae0de4d7c27566c192cd382873c8de3c9b949f
+
 otu_phylum <- otu_table(phylum)
 
 # Overview Class #

@@ -13,7 +13,7 @@ remove_Underscore <- function(phyloseq) {
     phyloseq
 }
 
-<<<<<<< HEAD
+
 get_phylo_levels <- function(phyloseq, sample, ranks, absolute) {
     # get all otus with hits in otu_table from phyloseq object
     id <- which(get_taxa(phyloseq, sample) > 0)
@@ -61,6 +61,5 @@ as.percent <- function(x) {
     names(y) <- names(x)
     return(y)
 }
-=======
->>>>>>> 1eae0de4d7c27566c192cd382873c8de3c9b949f
+
 
