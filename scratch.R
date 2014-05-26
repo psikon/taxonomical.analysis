@@ -8,6 +8,9 @@ path <- generateBiomFile("bacterial")
 # init the phyloseq object
 phylo <- generatePhyloseq("bacterial")
 
+sample_data(phylo)
+
+
 #"genus"
 
 # subset the phyloseq object based on taxonomy expressions
@@ -18,9 +21,20 @@ bakteria <- subset_taxa(phylo, superkingdom == 'k__Bacteria')
 # remove contamination
 bakteria <- remove_taxa(bakteria,"2")
 bakteria
+
+merged <- merge_samples(bakteria, group="pool_info")
+pdf("graphs/test.pdf")
+    plot_bar(tax_glom(merged,"class"), fill="class")
+dev.off()
+
 # Overview Phylum
 phylum <- tax_glom(bakteria,taxrank="phylum")
 phylum <- prune_taxa(taxa_sums(phylum) > 10, phylum)
+phylum <- merge_samples(phylum, group = "pool_info")
+pdf("graphs/test.pdf")
+    p = plot_bar(tax_glom(merged,"family"), fill="family")
+    p + facet_wrap(~Environment)
+dev.off()
 plot_overview_bar(phylum,level="phylum",seperator="Environment")
 otu_phylum <- otu_table(phylum)
 nrow(otu_phylum)
