@@ -17,7 +17,7 @@ create_input_overview <- function(file, name) {
     print(output)
 }
 
-plot_OTU_summary <- function(phyloseq, 
+plot_taxa_resolution <- function(phyloseq, 
                              filename, 
                              ranks = c('phylum', 'class', 'order', 'family', 'genus'),
                              absolute = FALSE,
@@ -26,10 +26,11 @@ plot_OTU_summary <- function(phyloseq,
                              length_group2 = 6,
                              title = "Resolution of OTUs") {
     # create data.fram with taxonomic ranks per sample
-    res <- sapply(rownames(sample_data(phylo)), function(x) {
+    res <- sapply(rownames(sample_data(phyloseq)), function(x) {
         # generate for every sample a vector with numbers of taxonomic levels
-        get_phylo_levels(phylo, x, ranks, absolute)
+        get_phylo_levels(phyloseq, x, ranks, absolute)
     })
+    colnames(res) <- sample_data(phyloseq)$SampleName
     # convert data for ggplot2
     data2 <- melt(res)
     # order the data like given ranks
@@ -71,5 +72,14 @@ plot_OTU_summary <- function(phyloseq,
     dev.off()
     # return location of output
     return(output)
+}
+
+plot_grouped_abundance <- function(phyloseq, 
+                                   filename, 
+                                   absolute = FALSE,
+                                   sep = TRUE,
+                                   length_group1 = 5, 
+                                   length_group2 = 6,
+                                   title = "Resolution of OTUs") {
 }
 

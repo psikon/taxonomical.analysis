@@ -2,18 +2,45 @@ library(ProjectTemplate)
 load.project()
 Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
 registerDoParallel(cores = 20)
+# in zeile 46 hinzufügen
+# colnames(mdf)[3] <- "Abundance"
+fixInNamespace(psmelt, pos = "package:phyloseq")
+
 
 #######################
 # init the data       #
 #######################
-
-# load all databases and generate a biom file with it
-path <- generateBiomFile("bacterial")
+# load all databases and metadata
+getMetadata()
+getConnections()
+path <- generateBiomFile("bacterial.old")
+phylo.old <- generatePhyloseq("bacterial.old")
+# generate a biom file
+path <- generateBiomFile("bacterial.new", data = list(sample60.new, 
+                                                      sample64.new, 
+                                                      sample74.new))
 # init the phyloseq object
-phylo <- generatePhyloseq("bacterial")
-
+phylo.new <- generatePhyloseq("bacterial.new")
 
 #############################################################
+
+# Evaluation
+
+plot_taxa_resolution(phylo.old, 
+                     filename="old.OTUs.absolute",
+                     absolute=T,
+                     sep = T,
+                     length_group1 = 4, 
+                     length_group2 = 5,
+                     title = "Resolution of OTUs (absolute)")
+
+plot_taxa_resolution(phylo.old, 
+                     filename="old.OTUs.percent",
+                     absolute=F,
+                     sep = T,
+                     length_group1 = 4, 
+                     length_group2 = 5,
+                     title = "Resolution of OTUs (in percent)")
 
 #######################
 # General separations #
@@ -283,7 +310,7 @@ top_species <- transform_sample_counts(subset_taxa(species, species %in% names(t
 pdf("graphs/most_abundant/ma_species.pdf")
     top_species <- remove_Underscore(top_species)
     p <- plot_bar(top_species, x = "SampleName", y = "Abundance", fill = "species",
-                title = "Top 10 taxa at species level")
+                title = "Top 10 taxa at species level")cd
     p$labels$y <- "Relative Abundance (in percent)"
     p + geom_bar(aes(color = species, 
                      fill = species), 

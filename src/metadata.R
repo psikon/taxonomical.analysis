@@ -57,6 +57,16 @@ metadata70 <- list(
     TotalNumReads = 7064 , ProkReads = 695, EukReads = 29, VirReads = 1,
     pool_info = "pool_aqua"
 )
+
+metadata70 <- list(
+    SampleId = 72, SampleName = "ef_cage_72",
+    BarcodeSequence = "TATCGTTGACCA", Location = "Jakarta", 
+    Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
+    Description = "fecal sample", DNAQuality = "good", DNAQuantity = 300,
+    TotalNumReads = 7064 , ProkReads = 695, EukReads = 29, VirReads = 1,
+    pool_info = "pool_aqua"
+)
+
 ##
 metadata74 <- list(
     SampleId = 74, SampleName = "ef_cage_74",
