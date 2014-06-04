@@ -78,8 +78,128 @@ plot_grouped_abundance <- function(phyloseq,
                                    filename, 
                                    absolute = FALSE,
                                    sep = TRUE,
-                                   length_group1 = 5, 
-                                   length_group2 = 6,
-                                   title = "Resolution of OTUs") {
+                                   length_group1 = 4, 
+                                   length_group2 = 5,
+                                   title = "Grouped Abundance") {
+    
+    # get a data.frame with grouped abundance values for every sample
+    res <- sapply(colnames(otu_table(phyloseq)),function(x) {
+        # convert otu_table to data.frame
+        data <- as.data.frame(otu_table(phyloseq))
+        #generate counts
+        counts <- count(data[, x])
+        if (absolute) {
+            # for absolute values sum all findings for manuell groups
+            df <- c("no hits" = counts$freq[which(counts$x == 0)],
+                    "1<x<10" = sum(counts$freq[which(counts$x>0 & counts$x<10)]),
+                    "10<x<100" = sum(counts$freq[which(counts$x>10 & counts$x<100)]),
+                    "100<x<1000" = sum(counts$freq[which(counts$x>100 & counts$x<1000)]),
+                    "x>1000" = sum(counts$freq[which(counts$x>1000)]))
+        } else {
+            # for absolute values calculate percentage for manuell groups
+            df <- c("no hits" = counts$freq[which(counts$x == 0)]*100/sum(counts$freq),
+                    "1<x<10" = sum(counts$freq[which(counts$x>0 & counts$x<10)])*100/sum(counts$freq),
+                    "10<x<100" = sum(counts$freq[which(counts$x>10 & counts$x<100)])*100/sum(counts$freq),
+                    "100<x<1000" = sum(counts$freq[which(counts$x>100 & counts$x<1000)])*100/sum(counts$freq),
+                    "x>1000" = sum(counts$freq[which(counts$x>1000)])*100/sum(counts$freq))
+        }
+       
+    })
+    # change labels for graph
+    colnames(res) <- sample_data(phyloseq)$SampleName
+    # convert for ggplot2
+    data2 <- melt(res)
+    # change names for easier access
+    colnames(data2) <- c("group", "name", "value")
+    # order the factor for ordered plot
+    data2$group <- factor(data2$group, levels = c("no hits", "1<x<10", "10<x<100",
+                                                  "100<x<1000", "x>1000"))
+    # generate seperation if value sep=TRUE
+    if (sep) {
+        # generate environment seperation for data
+        dest <- factor(c(rep("free living", length_group1 * 5),
+                         rep("aqua culture", length_group2 * 5)),
+                       levels = c("free living", "aqua culture"))
+        df <- cbind(data2, dest)
+    } else {
+        df <- data2
+    }
+    output <- paste0("graphs/", filename, ".pdf")
+    # generate stacked or dodged plot
+    k <- ggplot(df, aes(x = name, y = value, fill = group))
+         # type of plot
+    if (absolute) {
+        k <- k + geom_bar(stat = "identity", position = "dodge") 
+    } else {
+        k <- k + geom_bar(stat = "identity", position = "stack") 
+    }
+    # generate seperation
+    if (sep) {
+        # seperate into two windows
+        k <- k + facet_wrap(~dest, scales = "free_x") 
+    } else {
+        k <- k
+    }
+    # adjust rest for plotting
+    k <- k + xlab("\nSamples") + ylab("Number of occurences") +
+        theme_bw() + scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 15)) +  
+        guides(fill = guide_legend("Groups")) +    
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        ggtitle(title)  
+    # generate plot file
+    pdf(output)
+        plot(k)
+    dev.off()
+}
+
+plot_database_count <- function(data, 
+                                names, 
+                                filename,                                    
+                                sep = TRUE,
+                                length_group1 = 9, 
+                                length_group2 = 12,
+                                title = "Number of Taxonomies") {
+    # get length of taxonomy table per sample
+    res <- sapply(data,function(x){
+        db_query(conn(x),"SELECT COUNT(*) from taxonomy",1)
+    })
+    # name the rows like the databases
+    names(res) <- names
+    # convert for ggplot2
+    data2 <- melt(res)
+    # insert names
+    data2$name <- rownames(data2)
+    if (sep) {
+        # generate environment seperation for data
+        dest <- factor(c(rep("free living", length_group1),
+                         rep("aqua culture", length_group2 )),
+                       levels = c("free living", "aqua culture"))
+        df <- cbind(data2, dest)
+    } else {
+        df <- data2
+    }
+    # generate output path
+    output <- paste0("graphs/", filename, ".pdf")
+    # generate  plot
+    k <- ggplot(df, aes(x = name, y = value, fill= name))
+    # type of plot
+    k <- k + geom_bar(stat = "identity") 
+    # generate seperation
+    if (sep) {
+        # seperate into two windows
+        k <- k + facet_wrap(~dest, scales = "free_x") 
+    } else {
+        k <- k
+    }
+    # adjust rest for plotting
+    k <- k + xlab("\nTaxonomy databases") + ylab("Number of taxonomies") +
+        theme_bw() + scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 15)) +  
+        guides(fill = FALSE) +    
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        ggtitle(title)  
+    # generate plot file
+    pdf(output)
+        plot(k)
+    dev.off()
 }
 

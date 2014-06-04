@@ -8,8 +8,7 @@ metadata60 <- list(
     BarcodeSequence = "TACACGATCTAC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 300,
-    TotalNumReads = 4298 , ProkReads = 1257, EukReads = 30, VirReads = 0,
-    pool_info = "pool_free"
+    TotalNumReads = 4298 , ProkReads = 1257, EukReads = 30, VirReads = 0
 )
 
 metadata62 <- list(
@@ -17,8 +16,7 @@ metadata62 <- list(
     BarcodeSequence = "CACGCCATAATG", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 330,
-    TotalNumReads = 31911 , ProkReads = 19096, EukReads = 155, VirReads = 4,
-    pool_info = "big1"
+    TotalNumReads = 31911 , ProkReads = 19096, EukReads = 155, VirReads = 4
 )
 
 ##
@@ -27,8 +25,7 @@ metadata64 <- list(
     BarcodeSequence = "GGATCGCAGATC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 187,
-    TotalNumReads = 655346 , ProkReads = 57552, EukReads = 597765, VirReads = 27,
-    pool_info = "big2"
+    TotalNumReads = 655346 , ProkReads = 57552, EukReads = 597765, VirReads = 27
 )
 
 metadata66 <- list(
@@ -36,8 +33,7 @@ metadata66 <- list(
     BarcodeSequence = "AGCTGTTGTTTG", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 330,
-    TotalNumReads = 5260 , ProkReads = 1565, EukReads = 74, VirReads = 0,
-    pool_info = "big3"
+    TotalNumReads = 5260 , ProkReads = 1565, EukReads = 74, VirReads = 0
 )
 
 metadata68 <- list(
@@ -45,8 +41,7 @@ metadata68 <- list(
     BarcodeSequence = "GCGATATATCGC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 328,
-    TotalNumReads = 7895 , ProkReads = 662, EukReads = 43, VirReads = 0,
-    pool_info = "pool_free"
+    TotalNumReads = 7895 , ProkReads = 662, EukReads = 43, VirReads = 0
 )
 
 metadata70 <- list(
@@ -54,17 +49,15 @@ metadata70 <- list(
     BarcodeSequence = "AATCCGTACAGC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 200,
-    TotalNumReads = 7064 , ProkReads = 695, EukReads = 29, VirReads = 1,
-    pool_info = "pool_aqua"
+    TotalNumReads = 7064 , ProkReads = 695, EukReads = 29, VirReads = 1
 )
 
-metadata70 <- list(
+metadata72 <- list(
     SampleId = 72, SampleName = "ef_cage_72",
     BarcodeSequence = "TATCGTTGACCA", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 300,
-    TotalNumReads = 7064 , ProkReads = 695, EukReads = 29, VirReads = 1,
-    pool_info = "pool_aqua"
+    TotalNumReads = 7064 , ProkReads = 695, EukReads = 29, VirReads = 1
 )
 
 ##
@@ -73,8 +66,7 @@ metadata74 <- list(
     BarcodeSequence = "AGGCTACACGAC", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 75,
-    TotalNumReads = 752214 , ProkReads = 1088, EukReads = 751073, VirReads = 44,
-    pool_info = "big4"
+    TotalNumReads = 752214 , ProkReads = 1088, EukReads = 751073, VirReads = 44
 )
 
 metadata76 <- list(
@@ -82,8 +74,7 @@ metadata76 <- list(
     BarcodeSequence = "GAACCAAAGGAT", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 68,
-    TotalNumReads = 4568 , ProkReads = 1138, EukReads = 19, VirReads = 0,
-    pool_info = "pool_aqua"
+    TotalNumReads = 4568 , ProkReads = 1138, EukReads = 19, VirReads = 0
 )
 
 metadata78 <- list(
@@ -91,8 +82,7 @@ metadata78 <- list(
     BarcodeSequence = "GTACATACCGGT", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 140,
-    TotalNumReads = 60441 , ProkReads = 25, EukReads = 60417, VirReads = 1,
-    pool_info = "pool_aqua"
+    TotalNumReads = 60441 , ProkReads = 25, EukReads = 60417, VirReads = 1
 )
 
 metadata80 <- list(
@@ -100,8 +90,7 @@ metadata80 <- list(
     BarcodeSequence = "CCAGTGTATGCA", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 190,
-    TotalNumReads = 3917 , ProkReads = 626, EukReads = 32, VirReads = 0,
-    pool_info = "pool_aqua"
+    TotalNumReads = 3917 , ProkReads = 626, EukReads = 32, VirReads = 0
 )
 
 metadata82 <- list(
@@ -109,6 +98,5 @@ metadata82 <- list(
     BarcodeSequence = "TGAGTCACTGGT", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", Environment= "aquaculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 138,
-    TotalNumReads = 6409 , ProkReads = 613, EukReads = 20, VirReads = 0,
-    pool_info = "pool_aqua"
+    TotalNumReads = 6409 , ProkReads = 613, EukReads = 20, VirReads = 0
 )

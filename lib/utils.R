@@ -62,4 +62,28 @@ as.percent <- function(x) {
     return(y)
 }
 
+get_free <- function(phyloseq) {
+    subset_samples(phyloseq, Environment == "free living")
+}
+
+get_aqua <- function(phyloseq) {
+    subset_samples(phyloseq, Environment == "aquaculture")
+}
+
+last_rank <- function(x) {
+    x <- tail(colnames(x[,sapply(strsplit(x,"*__"), function(y){
+        length(y)>1
+    })]),n=1)
+    x
+}
+
+last_taxa <- function(x) {
+    rank <- tail(colnames(x[,sapply(strsplit(x,"*__"), function(y){
+        length(y)>1
+    })]),n=1)
+    x <- unlist(str_split(x[,rank],"__"))[2]
+    x
+}
+
+
 
