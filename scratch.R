@@ -64,7 +64,7 @@ aqua_core <- get_core_microbiom(get_aqua(bakteria))
 aqua_core.table <- get_core_table(aqua_core,"graphs/core microbiom/aqua_list.txt")
 plot_core_venn(bakteria,"graphs/core microbiom/free_vs_aqua_venn")
 
-pdf("graphs/core.class.pdf")
-    plot_bar(tax_glom(all_core,"class"),fill="class")
-dev.off()
+# Singletons
+
+
 
