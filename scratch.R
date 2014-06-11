@@ -49,7 +49,6 @@ bakteria <- remove_taxa(bakteria, "2")
 # filter less abundant taxa
 bakteria <- prune_taxa(taxa_sums(bakteria) > 3, bakteria)
 bakteria
-otu_table(bakteria)
 
 #############################################################
 load.project()
@@ -64,7 +63,24 @@ aqua_core <- get_core_microbiom(get_aqua(bakteria))
 aqua_core.table <- get_core_table(aqua_core,"graphs/core microbiom/aqua_list.txt")
 plot_core_venn(bakteria,"graphs/core microbiom/free_vs_aqua_venn")
 
+pdf("graphs/all_core.pdf")
+    plot_bar(tax_glom(all_core,"class"),fill="class")
+dev.off()
+pdf("graphs/aqua_core.pdf")
+    plot_bar(tax_glom(aqua_core,"class"),fill="class")
+dev.off()
 # Singletons
+single_one_sample <- get_singletons(phyloseq = bakteria,
+                                    num_samples = 1,
+                                    remove_samples = TRUE)
+single_two_sample <- get_singletons(phyloseq = bakteria,
+                                    num_samples = 2,
+                                    remove_samples = TRUE)
 
+
+get_singleton_list(phyloseq = single_one_sample,
+                   file = "singletons.one_sample.txt")
+get_singleton_list(phyloseq = single_two_sample,
+                   file = "singletons.two_sample.txt")
 
 

@@ -12,7 +12,7 @@ get_core_microbiom <- function(phyloseq) {
     # subset the desired taxa from tax_table to make both equal
     tax_tbl <- tax_tbl[rownames(tax_tbl) %in%  remain_taxa]
     # build a new phyloseq object
-    phyloseq <- phyloseq(otu_tbl,sample_tbl,tax_tbl)
+    phyloseq <- phyloseq(otu_tbl, sample_tbl, tax_tbl)
     phyloseq
 }
 
