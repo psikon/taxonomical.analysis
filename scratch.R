@@ -47,8 +47,25 @@ bakteria <- subset_taxa(phylo.new, superkingdom == 'k__Bacteria')
 # remove contamination
 bakteria <- remove_taxa(bakteria, "2")
 # filter less abundant taxa
-bakteria <- prune_taxa(taxa_sums(bakteria) > 3, bakteria)
+#bakteria <- prune_taxa(taxa_sums(bakteria) > 3, bakteria)
 bakteria
+
+#############################################################
+load.project()
+
+# plot richness
+
+# eliminate species without any abundance
+bak <- prune_species(speciesSums(bakteria) > 0, bakteria)
+bak
+
+plot_richness_overview(merge_samples(bak,group="Environment"), file = "graphs/richness/overview.environment.pdf")
+plot_richness_overview(bak,file="graphs/richness/overview.all_sample.pdf")
+plot_richness_shannon(bak)
+plot_richness_simpson(bak)
+plot_richness_Chao(bak)
+plot_richness_ACE(bak)
+richness <- get_richness(bak) 
 
 #############################################################
 load.project()
@@ -83,4 +100,16 @@ get_singleton_list(phyloseq = single_one_sample,
 get_singleton_list(phyloseq = single_two_sample,
                    file = "singletons.two_sample.txt")
 
+##################################################################
 
+# ordination distance between samples
+ord.samples <- ordination_preprocess(bak, hits = 5, num_samples = 0.5, 
+                                     level="phylum", num_best = 5)
+plot_ordination_Samples(ord.samples, file = "graphs/ordination/ord.sample.phylum5.pdf",
+                        level = "phylum", title = "Ordination of Samples by 5 best phyla")
+
+# ordination between OTUs
+ord.otus <- ordination_preprocess(bak, hits = 5, num_samples= 0.5, level = "class", num_best = 10)
+plot_ordination_OTUs(ord.otus, file = "graphs/ordination/ord.otus.class10.pdf",
+                     level = "class", title = "Ordination of OTUs by 10 best class", 
+                     facet = T, sep = 5)

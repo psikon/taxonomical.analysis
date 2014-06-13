@@ -52,3 +52,18 @@ get_core_table <- function(phyloseq, file = NULL, col.names = F, row.names = F) 
     }
     data 
 }
+
+
+# free <- get_free(tax_glom(bakteria,"order"))
+# aqua <- get_aqua(tax_glom(bakteria,"order"))
+# free <- as.data.frame(apply(t(otu_table(free)), 1, function(row) {
+#     round(row/sum(row),2)
+# }))
+# free <- free[rowSums(free)>0,]
+# 
+# aqua <- data <- as.data.frame(apply(t(otu_table(aqua)), 1, function(row) {
+#     round(row/sum(row),2)
+# }))
+# aqua <- aqua[rowSums(aqua)>0,]
+# free
+# aqua
