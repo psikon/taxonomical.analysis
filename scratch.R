@@ -53,19 +53,10 @@ bakteria
 load.project()
 
 # plot richness
-
-# eliminate species without any abundance
-bak <- prune_species(speciesSums(bakteria) > 0, bakteria)
-bak
-
-plot_richness_overview(merge_samples(bak, group="HoldingCondition"), file = "graphs/richness/overview.environment.pdf")
-plot_richness_overview(bak,file="graphs/richness/overview.all_sample.pdf")
-plot_richness_shannon(bak)
-plot_richness_simpson(bak)
-plot_richness_Chao(bak)
-plot_richness_ACE(bak)
-richness <- get_richness(bak) 
-
+plot_richness_overview(bakteria, file = "graphs/richness/richness.samples.pdf", 
+                       measures = c("Observed", "Simpson", "Shannon"))
+richness <- get_richness(bakteria) 
+estimate_richness(bakteria,split=T,"Fisher")
 #############################################################
 load.project()
 
@@ -79,15 +70,14 @@ aqua_core <- get_core_microbiom(get_aqua(bakteria))
 aqua_core.table <- get_core_table(aqua_core,"lists/core/core_aqua.list.txt")
 plot_core_venn(bakteria,"graphs/core microbiom/free_vs_aqua_venn")
 
-pdf("graphs/genus.pdf")
-    plot_bar(tax_glom(bakteria,"genus"),fill="genus")
-dev.off()
 pdf("graphs/all_core.pdf")
     plot_bar(tax_glom(all_core,"class"),fill="class")
 dev.off()
+
 pdf("graphs/aqua_core.pdf")
     plot_bar(tax_glom(aqua_core,"class"),fill="class")
 dev.off()
+
 # Singletons
 single_one_sample <- get_singletons(phyloseq = bakteria,
                                     num_samples = 1,
@@ -105,9 +95,11 @@ get_singleton_list(phyloseq = single_two_sample,
 ##################################################################
 
 # ordination distance between samples
-ord.samples <- ordination_preprocess(bak, hits = 5, num_samples = 0.5, 
-                                     level="phylum", num_best = 5)
-plot_ordination_Samples(ord.samples, file = "graphs/ordination/ord.sample.phylum5.pdf",
+
+ord.samples <- ordination_preprocess(bakteria, hits = 5, num_samples = 0.5, 
+                                     level="genus", num_best = 5)
+plot_ordination_Samples(bakteria, file = "graphs/ordination/ord.sample.phylum5.pdf",
+                        method = "MDS", distance = "jaccard",
                         level = "phylum", title = "Ordination of Samples by 5 best phyla")
 
 # ordination between OTUs

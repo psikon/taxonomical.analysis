@@ -85,5 +85,20 @@ last_taxa <- function(x) {
     x
 }
 
-
-
+get_richness_theme <- function() {
+    ggtheme_alpha <- theme_bw() + theme(
+                                    legend.position="top",
+                                    legend.text = element_text(size = 10),
+                                    legend.title = element_text(size = 12),
+                                    axis.text = element_text(size = 8),
+                                    axis.title = element_text(size = 12),
+                                    strip.text = element_text(size = 12),
+                                    plot.margin = unit(c(0.025,0.025,.025,0.025), "npc"),
+                                    axis.text.x = element_text(face = "italic", size=rel(1), 
+                                                               angle = 30, hjust = 1, 
+                                                               vjust = 1),
+                                    axis.title = element_text(size=rel(1), lineheight=1.5),
+                                    legend.key = element_rect(colour = "white")
+                                    )
+    ggtheme_alpha
+}
