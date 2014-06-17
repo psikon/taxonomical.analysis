@@ -19,11 +19,10 @@ path <- generateBiomFile("bacterial.old")
 phylo.old <- generatePhyloseq("bacterial.old")
 
 # generate a biom file
-path <- generateBiomFile("bacterial.new", data = list(sample60.new, 
-                                                      sample64.new,
+path <- generateBiomFile("bacterial.new", data = list(sample60.new, sample64.new,
                                                       sample68.new, sample70.new,
                                                       sample72.new, sample74.new,
-                                                      sample76.new,
+                                                      sample76.new, sample78.new,
                                                       sample80.new, sample82.new))
 # init the phyloseq object
 phylo.new <- generatePhyloseq("bacterial.new")
@@ -59,7 +58,7 @@ load.project()
 bak <- prune_species(speciesSums(bakteria) > 0, bakteria)
 bak
 
-plot_richness_overview(merge_samples(bak,group="Environment"), file = "graphs/richness/overview.environment.pdf")
+plot_richness_overview(merge_samples(bak, group="HoldingCondition"), file = "graphs/richness/overview.environment.pdf")
 plot_richness_overview(bak,file="graphs/richness/overview.all_sample.pdf")
 plot_richness_shannon(bak)
 plot_richness_simpson(bak)
@@ -73,13 +72,16 @@ load.project()
 # Core Microbioms
 
 all_core <- get_core_microbiom(bakteria)
-all_core.table <- get_core_table(all_core,"graphs/core microbiom/all_list.txt")
+all_core.table <- get_core_table(all_core,"lists/core/core_all.list.txt")
 free_core <- get_core_microbiom(get_free(bakteria))
-free_core.table <- get_core_table(free_core,"graphs/core microbiom/free_list.txt")
+free_core.table <- get_core_table(free_core,"lists/core/core_free.list.txt")
 aqua_core <- get_core_microbiom(get_aqua(bakteria))
-aqua_core.table <- get_core_table(aqua_core,"graphs/core microbiom/aqua_list.txt")
+aqua_core.table <- get_core_table(aqua_core,"lists/core/core_aqua.list.txt")
 plot_core_venn(bakteria,"graphs/core microbiom/free_vs_aqua_venn")
 
+pdf("graphs/genus.pdf")
+    plot_bar(tax_glom(bakteria,"genus"),fill="genus")
+dev.off()
 pdf("graphs/all_core.pdf")
     plot_bar(tax_glom(all_core,"class"),fill="class")
 dev.off()
@@ -96,9 +98,9 @@ single_two_sample <- get_singletons(phyloseq = bakteria,
 
 
 get_singleton_list(phyloseq = single_one_sample,
-                   file = "singletons.one_sample.txt")
+                   file = "lists/singletons/singletons.one_sample.txt")
 get_singleton_list(phyloseq = single_two_sample,
-                   file = "singletons.two_sample.txt")
+                   file = "lists/singletons/singletons.two_sample.txt")
 
 ##################################################################
 

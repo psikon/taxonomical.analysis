@@ -5,7 +5,7 @@ plot_richness_overview <- function(phyloseq,
     p = plot_richness(phyloseq, 
                       color= "samples", 
                       measures = measures,
-                      title = "Diversity Overview")
+                      title = "Diversity Overview", shape = "HoldingCondition")
     p = p + geom_point(size = 2, alpha = 0.7) +
         guides(fill = guide_legend("Samples")) + xlab("\nSample")
     

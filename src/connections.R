@@ -16,7 +16,7 @@ sample74.new <- taxonomyReportDBConnect("data/taxonomyDB/sample74.new.bac.db", m
 sample76.old <- taxonomyReportDBConnect("data/taxonomyDB/sample76_bac.db", metadata76) 
 sample76.new <- taxonomyReportDBConnect("data/taxonomyDB/sample76.new.bac.db", metadata76) 
 sample78.old <- taxonomyReportDBConnect("data/taxonomyDB/sample78_bac.db", metadata78) 
-#sample78.new <- taxonomyReportDBConnect("data/taxonomyDB/sample78.new.bac.db", metadata78) 
+sample78.new <- taxonomyReportDBConnect("data/taxonomyDB/sample78.new.bac.db", metadata78) 
 sample80.old <- taxonomyReportDBConnect("data/taxonomyDB/sample80_bac.db", metadata80) 
 sample80.new <- taxonomyReportDBConnect("data/taxonomyDB/sample80.new.bac.db", metadata80) 
 sample82.old <- taxonomyReportDBConnect("data/taxonomyDB/sample82_bac.db", metadata82) 
