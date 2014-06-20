@@ -54,9 +54,9 @@ load.project()
 
 # plot richness
 plot_richness_overview(bakteria, file = "graphs/richness/richness.samples.pdf", 
-                       measures = c("Observed", "Simpson", "Shannon"))
-richness <- get_richness(bakteria) 
-estimate_richness(bakteria,split=T,"Fisher")
+                       measures = c("Observed", "Simpson", "Shannon","Fisher"))
+richness <- get_richness(bakteria, measures = c("Observed", "Simpson", "Shannon", "Fisher")) 
+estimate_richness(bakteria, split = T,"Fisher")
 #############################################################
 load.project()
 
@@ -104,6 +104,8 @@ plot_ordination_Samples(bakteria, file = "graphs/ordination/ord.sample.phylum5.p
 
 # ordination between OTUs
 ord.otus <- ordination_preprocess(bak, hits = 5, num_samples= 0.5, level = "class", num_best = 10)
-plot_ordination_OTUs(ord.otus, file = "graphs/ordination/ord.otus.class10.pdf",
+plot_ordination_OTUs(bakteria, file = "graphs/ordination/ord.otus.class10.pdf",
                      level = "class", title = "Ordination of OTUs by 10 best class", 
                      facet = T, sep = 5)
+
+

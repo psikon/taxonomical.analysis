@@ -63,11 +63,11 @@ as.percent <- function(x) {
 }
 
 get_free <- function(phyloseq) {
-    subset_samples(phyloseq, Environment == "free living")
+    subset_samples(phyloseq, HoldingCondition == "free living")
 }
 
 get_aqua <- function(phyloseq) {
-    subset_samples(phyloseq, Environment == "aquaculture")
+    subset_samples(phyloseq, HoldingCondition == "mariculture")
 }
 
 last_rank <- function(x) {
@@ -102,3 +102,19 @@ get_richness_theme <- function() {
                                     )
     ggtheme_alpha
 }
+
+countArtifacts <- function(phyloseq, sample) {
+    with <- subset_taxa(phyloseq, superkingdom == 'k__Bacteria')
+    without <- remove_taxa(with, "2")
+    countReads(with, as.character(sample)) - countReads(without, as.character(sample))
+}
+
+countReads <- function(phyloseq, sample) {
+    value <- sum(count(get_taxa(phyloseq, as.character(sample)))$x * count(get_taxa(phyloseq, as.character(sample)))$freq)
+    return(value)
+}
+
+getOTUs <- function(phyloseq, sample) {
+    length(which(otu_table(phyloseq)[,as.character(sample)]>0)==TRUE)
+}
+

@@ -38,8 +38,8 @@ plot_taxa_resolution <- function(phyloseq,
     if (sep) {
         # generate environment seperation for data
         dest <- factor(c(rep("free living", length_group1 * length(ranks)),
-                         rep("aqua culture", length_group2 * length(ranks))),
-                       levels = c("free living", "aqua culture"))
+                         rep("mariculture", length_group2 * length(ranks))),
+                       levels = c("free living", "mariculture"))
         df <- cbind(data2, dest)
     } else {
         df <- data2
@@ -118,8 +118,8 @@ plot_grouped_abundance <- function(phyloseq,
     if (sep) {
         # generate environment seperation for data
         dest <- factor(c(rep("free living", length_group1 * 5),
-                         rep("aqua culture", length_group2 * 5)),
-                       levels = c("free living", "aqua culture"))
+                         rep("mariculture", length_group2 * 5)),
+                       levels = c("free living", "mariculture"))
         df <- cbind(data2, dest)
     } else {
         df <- data2
@@ -172,8 +172,8 @@ plot_database_count <- function(data,
     if (sep) {
         # generate environment seperation for data
         dest <- factor(c(rep("free living", length_group1),
-                         rep("aqua culture", length_group2 )),
-                       levels = c("free living", "aqua culture"))
+                         rep("mariculture", length_group2 )),
+                       levels = c("free living", "mariculture"))
         df <- cbind(data2, dest)
     } else {
         df <- data2

@@ -1,102 +1,101 @@
 # TotalNumReads = queries of TaxonomyReportDB
 # ProkReads = sum(count(get_taxa(bak,"60"))$x*count(get_taxa(bak,"60"))$freq)
-# EukReads = sum(count(get_taxa(euk,"82"))$x*count(get_taxa(euk,"82"))$freq)
-
+# sum(count(get_taxa(withArtifacts,"60"))$x*count(get_taxa(withArtifacts,"60"))$freq) - sum(count(get_taxa(withArtifacts,"60"))$x*count(get_taxa(withArtifacts,"60"))$freq) - 
 
 metadata60 <- list(
-    SampleId = 60, SampleName = "ef_free_60",
-    BarcodeSequence = "TACACGATCTAC", Location = "Jakarta", 
+    SampleId = 60, SampleName = "ef_free_60", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition = "free living", 
-    Description = "fecal sample", DNAQuality = "good", DNAQuantity = 300,
-    TotalNumReads = 4298 , ProkReads = 1257, EukReads = 30, VirReads = 0
+    Description = "fecal sample", DNAQuality = "good", DNAQuantity = 300, 
+    TotalNumReads = 448479 , ProkReads = 307267, EukReads = 64, VirReads = 0, 
+    Artifacts = 141150, OTUs = 174
 )
 
 metadata62 <- list(
-    SampleId = 62, SampleName = "ef_free_62",
-    BarcodeSequence = "CACGCCATAATG", Location = "Jakarta", 
+    SampleId = 62, SampleName = "ef_free_62", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 330,
-    TotalNumReads = 31911 , ProkReads = 19096, EukReads = 155, VirReads = 4
+    TotalNumReads = 326143 , ProkReads = 19096, EukReads = 155, VirReads = 0, 
+    Artifacts = 451670, OTUs = 174
 )
 
 ##
 metadata64 <- list(
-    SampleId = 64, SampleName = "ef_free_64",
-    BarcodeSequence = "GGATCGCAGATC", Location = "Jakarta", 
+    SampleId = 64, SampleName = "ef_free_64", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 187,
-    TotalNumReads = 655346 , ProkReads = 57552, EukReads = 597765, VirReads = 27
+    TotalNumReads = 326142 , ProkReads = 292536, EukReads = 188, VirReads = 0, 
+    Artifacts =  33413, OTUs = 450
 )
 
 metadata66 <- list(
-    SampleId = 66, SampleName = "ef_free_66",
-    BarcodeSequence = "AGCTGTTGTTTG", Location = "Jakarta", 
+    SampleId = 66, SampleName = "ef_free_66", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 330,
-    TotalNumReads = 5260 , ProkReads = 1565, EukReads = 74, VirReads = 0
+    TotalNumReads = 5260 , ProkReads = 1565, EukReads = 74, VirReads = 0, 
+    Artifacts = 451670, OTUs = 450
 )
 
 metadata68 <- list(
-    SampleId = 68, SampleName = "ef_free_68",
-    BarcodeSequence = "GCGATATATCGC", Location = "Jakarta", 
+    SampleId = 68, SampleName = "ef_free_68", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition = "free living", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 328,
-    TotalNumReads = 7895 , ProkReads = 662, EukReads = 43, VirReads = 0
+    TotalNumReads = 590435 , ProkReads = 394503, EukReads = 90, VirReads = 0, 
+    Artifacts =  195840, OTUs = 107
 )
 
 metadata70 <- list(
-    SampleId = 70, SampleName = "ef_cage_70",
-    BarcodeSequence = "AATCCGTACAGC", Location = "Jakarta", 
+    SampleId = 70, SampleName = "ef_cage_70", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition= "mariculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 200,
-    TotalNumReads = 7064 , ProkReads = 695, EukReads = 29, VirReads = 1
+    TotalNumReads = 830720 , ProkReads = 151707, EukReads = 60, VirReads = 1, 
+    Artifacts = 678950, OTUs = 104
 )
 
 metadata72 <- list(
-    SampleId = 72, SampleName = "ef_cage_72",
-    BarcodeSequence = "TATCGTTGACCA", Location = "Jakarta", 
+    SampleId = 72, SampleName = "ef_cage_72", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition= "mariculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 300,
-    TotalNumReads = 7064 , ProkReads = 695, EukReads = 29, VirReads = 1
+    TotalNumReads = 621426 , ProkReads = 377240, EukReads = 45, VirReads = 0, 
+    Artifacts = 244140, OTUs = 85
 )
 
 ##
 metadata74 <- list(
-    SampleId = 74, SampleName = "ef_cage_74",
-    BarcodeSequence = "AGGCTACACGAC", Location = "Jakarta", 
+    SampleId = 74, SampleName = "ef_cage_74", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition= "mariculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 75,
-    TotalNumReads = 752214 , ProkReads = 1088, EukReads = 751073, VirReads = 44
+    TotalNumReads = 86449 , ProkReads = 44107, EukReads = 208, VirReads = 1, 
+    Artifacts = 42124, OTUs = 443
 )
 
 metadata76 <- list(
-    SampleId = 76, SampleName = "ef_cage_76",
-    BarcodeSequence = "GAACCAAAGGAT", Location = "Jakarta", 
+    SampleId = 76, SampleName = "ef_cage_76", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition= "mariculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 68,
-    TotalNumReads = 4568 , ProkReads = 1138, EukReads = 19, VirReads = 0
+    TotalNumReads = 810522 , ProkReads = 134490, EukReads = 51, VirReads = 0, 
+    Artifacts = 675980, OTUs = 142
 )
 
 metadata78 <- list(
-    SampleId = 78, SampleName = "ef_cage_78",
-    BarcodeSequence = "GTACATACCGGT", Location = "Jakarta", 
+    SampleId = 78, SampleName = "ef_cage_78", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition= "mariculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 140,
-    TotalNumReads = 60441 , ProkReads = 25, EukReads = 60417, VirReads = 1
+    TotalNumReads = 950972 , ProkReads = 148478, EukReads = 64, VirReads = 0, 
+    Artifacts = 802430, OTUs = 87
 )
 
 metadata80 <- list(
-    SampleId = 80, SampleName = "ef_cage_80",
-    BarcodeSequence = "CCAGTGTATGCA", Location = "Jakarta", 
+    SampleId = 80, SampleName = "ef_cage_80", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition= "mariculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 190,
-    TotalNumReads = 3917 , ProkReads = 626, EukReads = 32, VirReads = 0
+    TotalNumReads = 745240 , ProkReads = 121627, EukReads = 62, VirReads = 0, 
+    Artifacts = 623550, OTUs = 96
 )
 
 metadata82 <- list(
-    SampleId = 82, SampleName = "ef_cage_82",
-    BarcodeSequence = "TGAGTCACTGGT", Location = "Jakarta", 
+    SampleId = 82, SampleName = "ef_cage_82", Location = "Jakarta", 
     Host = "Epinephelus fuscoguttatus", HoldingCondition= "mariculture", 
     Description = "fecal sample", DNAQuality = "good", DNAQuantity = 138,
-    TotalNumReads = 6409 , ProkReads = 613, EukReads = 20, VirReads = 0
+    TotalNumReads = 546183 , ProkReads = 94464, EukReads = 49, VirReads = 0, 
+    Artifacts = 451670, OTUs = 106
 )
