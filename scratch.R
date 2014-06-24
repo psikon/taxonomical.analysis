@@ -4,7 +4,7 @@ Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
 registerDoParallel(cores = 20)
 # in zeile 46 hinzufügen
 # colnames(mdf)[3] <- "Abundance"
-fixInNamespace(psmelt, pos = "package:phyloseq")
+#fixInNamespace(psmelt, pos = "package:phyloseq")
 
 
 #######################
@@ -52,11 +52,33 @@ bakteria
 #############################################################
 load.project()
 
+# plot rarefaction curves
+
+pdf("graphs/rarefaction/rarefaction_curve.pdf")
+    plot_rarefaction_curves(bakteria, 100)
+dev.off()
+pdf("graphs/rarefaction/rarefaction_curve.mariculture.pdf")
+    plot_rarefaction_curves(get_aqua(bakteria), 100)
+dev.off()
+pdf("graphs/rarefaction/rarefaction_curve.free.pdf")
+    plot_rarefaction_curves(get_free(bakteria), 10)
+dev.off()
+
+###############################################################
+
 # plot richness
 plot_richness_overview(bakteria, file = "graphs/richness/richness.samples.pdf", 
-                       measures = c("Observed", "Simpson", "Shannon","Fisher"))
-richness <- get_richness(bakteria, measures = c("Observed", "Simpson", "Shannon", "Fisher")) 
-estimate_richness(bakteria, split = T,"Fisher")
+                       measures = c("Observed", "Simpson", "Shannon","Fisher"), 
+                       rarefy = F)
+plot_richness_overview(bakteria, file = "graphs/richness/rarefy_richness.samples.pdf",
+                       measures = c("Observed", "Simpson", "Shannon","Fisher"),
+                       rarefy = T)
+richness <- get_richness(bakteria, 
+                         measures = c("Observed", "Simpson", "Shannon", "Fisher"), 
+                         rarefy = F) 
+rarefy_richness <- get_richness(bakteria, 
+                                measures = c("Observed", "Simpson", "Shannon", "Fisher"),
+                                rarefy = T)
 #############################################################
 load.project()
 
@@ -98,7 +120,7 @@ get_singleton_list(phyloseq = single_two_sample,
 
 ord.samples <- ordination_preprocess(bakteria, hits = 5, num_samples = 0.5, 
                                      level="genus", num_best = 5)
-plot_ordination_Samples(bakteria, file = "graphs/ordination/ord.sample.phylum5.pdf",
+plot_ordination_Samples(get_rarefied_phyloseq(bakteria), file = "graphs/ordination/ord.sample.phylum5.pdf",
                         method = "MDS", distance = "jaccard",
                         level = "phylum", title = "Ordination of Samples by 5 best phyla")
 

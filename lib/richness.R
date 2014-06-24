@@ -1,10 +1,20 @@
 plot_richness_overview <- function(phyloseq, 
                                    file = "graphs/richness/richness.overview.pdf",
-                                   measures = c("Observed", "Shannon", "Simpson","ACE", "Chao1")) {
+                                   measures = c("Observed", "Shannon", "Simpson","ACE", "Chao1"),
+                                   rarefy = F, rngseed = 1234, replace = F) {
     # adjust theme options (see utils.R)
     ggtheme_alpha <- get_richness_theme()
     # rarefy to even depth
-    prar <- rarefy_even_depth(phyloseq, rngseed = 1234, replace = TRUE, trimOTUs = TRUE)
+    if (rarefy) {
+        prar <- rarefy_even_depth(phyloseq, 
+                                  sample.size= min(sample_sums(phyloseq)),
+                                  rngseed = rngseed, 
+                                  replace = replace, 
+                                  trimOTUs = TRUE,
+                                  verbose = F)
+    } else {
+        prar <- phyloseq
+    }
     # remove taxa with all abundance values == 0
     prar <- prune_taxa(taxa_sums(prar) > 0, prar)
     # create richness graph
@@ -28,8 +38,18 @@ plot_richness_overview <- function(phyloseq,
 }
 
 get_richness <- function(phyloseq,
-                         measures = c("Observed", "Chao1", "ACE", "Shannon", "Simpson")) {
-    data <- rarefy_even_depth(phyloseq, rngseed = 1234, replace = TRUE, trimOTUs = TRUE)
+                         measures = c("Observed", "Chao1", "ACE", "Shannon", "Simpson"),
+                         rarefy = F, rngseed = 1234, replace = F) {
+    if (rarefy) {
+        data <- rarefy_even_depth(phyloseq, 
+                                  sample.size= min(sample_sums(phyloseq)),
+                                  rngseed = rngseed,
+                                  replace = replace, 
+                                  trimOTUs = TRUE, 
+                                  verbose = F)
+    } else {
+        data <- phyloseq
+    }
     data <- estimate_richness(data, measures = measures)
     if (nrow(sample_data(phyloseq))>2) rownames(data) <- as.character(sample_data(phyloseq)$SampleName)
     data <- round(data,2)

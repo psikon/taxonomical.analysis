@@ -23,7 +23,7 @@ plot_ordination_OTUs <- function(phyloseq, file = "graphs/ordination/ordinate.ot
                                  level, title = "Ordination of Taxa", 
                                  facet = T, sep = 5) {
     theme_set(theme_bw())
-    phyloseq.ord <- ordinate(phyloseq, method=method, distance=distance)
+    phyloseq.ord <- ordinate(phyloseq,level, method=method, distance=distance)
     p = plot_ordination(phyloseq, phyloseq.ord, type = "taxa", color = level, title=title)
     if (facet) {
         p = p + eval(parse(text=paste0("facet_wrap(~",as.name(level),",",sep,")"))) 
@@ -36,6 +36,7 @@ plot_ordination_OTUs <- function(phyloseq, file = "graphs/ordination/ordinate.ot
 plot_ordination_Samples <- function(phyloseq, file = "graphs/ordination/ordinate.samples.pdf",
                                     method ="NMDS", distance="bray", 
                                     level, title = "Ordination of Samples") {
+    theme_set(theme_bw())
     phyloseq.ord <- ordinate(phyloseq, method = method, distance = distance)
     p = plot_ordination(phyloseq, phyloseq.ord, type = "samples", color = "SampleName")
     p = p + geom_polygon(aes(fill = SampleName)) + geom_point(size = 3) + ggtitle(title)
