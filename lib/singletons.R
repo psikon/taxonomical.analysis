@@ -1,4 +1,4 @@
-get_singletons <- function(phyloseq, num_samples = 1, remove_samples = TRUE) {
+get_singletons <- function(phyloseq, num_samples = 1, remove_samples = TRUE, filter = 2) {
     # get all rows not belonging to the core microbiom
     non_zero <- rownames(otu_table(get_core_microbiom(phyloseq)))
     # reduce otu_table
@@ -36,6 +36,7 @@ get_singletons <- function(phyloseq, num_samples = 1, remove_samples = TRUE) {
     result <- phyloseq(otu_table(data, taxa_are_rows = T),
                        sample_tbl,
                        tax_tbl)
+    result <- prune_taxa(taxa_sums(result) > filter, result)
     result
 }
 

@@ -4,12 +4,12 @@ remove_taxa <- function(phylo, taxa) {
 }
 
 remove_Underscore <- function(phyloseq) {
-    data <- phyloseq@tax_table@.Data
+    data <- tax_table(phyloseq)
     if(any(grepl("__", data))) {
         data <- substr(data, 4, length(data))
-        data[which(data == "")] <- "undefined"
+        data[which(data == "")] <- "not classified"
     }
-    phyloseq@tax_table@.Data <- data
+    tax_table(phyloseq) <- data
     phyloseq
 }
 

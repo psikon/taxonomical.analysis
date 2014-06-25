@@ -4,7 +4,7 @@ Sys.setenv("PKG_CXXFLAGS" = "-std=c++11")
 registerDoParallel(cores = 20)
 # in zeile 46 hinzufügen
 # colnames(mdf)[3] <- "Abundance"
-#fixInNamespace(psmelt, pos = "package:phyloseq")
+fixInNamespace(psmelt, pos = "package:phyloseq")
 
 
 #######################
@@ -65,6 +65,21 @@ pdf("graphs/rarefaction/rarefaction_curve.free.pdf")
 dev.off()
 
 ###############################################################
+load.project()
+# Plot the most abundant Taxat per Habitat
+plot_most_abundant_per_habitat(bakteria, level = "phylum",threshold = 0.01,file = "graphs/most_abundant/habitat.phylum.pdf")
+plot_most_abundant_per_habitat(bakteria, level = "class",threshold = 0.01,file = "graphs/most_abundant/habitat.class.pdf")
+plot_most_abundant_per_habitat(bakteria, level = "order",threshold = 0.01,file = "graphs/most_abundant/habitat.order.pdf")
+plot_most_abundant_per_habitat(bakteria, level = "family",threshold = 0.01,file = "graphs/most_abundant/habitat.family.pdf")
+plot_most_abundant_per_habitat(bakteria, level = "genus",threshold = 0.01,file = "graphs/most_abundant/habitat.genus.pdf")
+
+plot_most_abundant_per_sample(bakteria, level = "phylum",threshold = 0.01,file = "graphs/most_abundant/sample.phylum.pdf")
+plot_most_abundant_per_sample(bakteria, level = "class",threshold = 0.01,file = "graphs/most_abundant/sample.class.pdf")
+plot_most_abundant_per_sample(bakteria, level = "order",threshold = 0.01,file = "graphs/most_abundant/sample.order.pdf")
+plot_most_abundant_per_sample(bakteria, level = "family",threshold = 0.01,file = "graphs/most_abundant/sample.family.pdf")
+plot_most_abundant_per_sample(bakteria, level = "genus",threshold = 0.01,file = "graphs/most_abundant/sample.genus.pdf")
+
+#################################################################
 
 # plot richness
 plot_richness_overview(bakteria, file = "graphs/richness/richness.samples.pdf", 

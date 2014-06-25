@@ -1,55 +1,39 @@
 # Evaluation
 
 # Resolution of Taxa 
-plot_taxa_resolution(phylo.old, 
-                     filename = "old.OTUs.absolute",
+plot_taxa_resolution(bakteria, 
+                     file = "graphs/evaluation/taxa_resolution.absolute.pdf",
                      absolute = T,
                      sep = T,
-                     length_group1 = 4, 
-                     length_group2 = 5,
+                     length_group1 = 3, 
+                     length_group2 = 7,
                      title = "Resolution of OTUs (absolute)")
 
-plot_taxa_resolution(phylo.old, 
-                     filename = "old.OTUs.percent",
+plot_taxa_resolution(bakteria, 
+                     file = "graphs/evaluation/taxa_resolution.percent.pdf",
                      absolute = F,
                      sep = T,
-                     length_group1 = 4, 
-                     length_group2 = 5,
+                     length_group1 = 3, 
+                     length_group2 = 7,
                      title = "Resolution of OTUs (in percent)")
 
 # Abundance Table
 
-plot_grouped_abundance(phylo.old,
-                       filename = "old.abundance.abs",
+plot_grouped_abundance(bakteria,
+                       file = "graphs/evaluation/grouped_abundance.absolute.pdf",
                        sep = T,
-                       length_group1 = 4,
-                       length_group2 = 5, 
+                       length_group1 = 3,
+                       length_group2 = 7, 
                        absolute = T,
                        title = "Grouped abundance of OTUs (absolute)")
 
-plot_grouped_abundance(phylo.old,
-                       filename = "old.abundance.perc",
-                       sep = T,
-                       length_group1 = 4,
-                       length_group2 = 5, 
-                       absolute = F,
-                       title = "Grouped abundance of OTUs (in percent)")
-
-plot_grouped_abundance(phylo.new,
-                       filename = "new.abundance.perc",
+plot_grouped_abundance(bakteria,
+                       file = "graphs/evaluation/grouped_abundance.percent.pdf",
                        sep = T,
                        length_group1 = 3,
-                       length_group2 = 5, 
+                       length_group2 = 7, 
                        absolute = F,
                        title = "Grouped abundance of OTUs (in percent)")
-
-plot_grouped_abundance(phylo.new,
-                       filename = "new.abundance.abs",
-                       sep = T,
-                       length_group1 = 3,
-                       length_group2 = 5, 
-                       absolute = T,
-                       title = "Grouped abundance of OTUs (absolute)")
 
 # Evaluation of TaxonomyReportDBs
 

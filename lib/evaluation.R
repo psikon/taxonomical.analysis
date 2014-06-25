@@ -18,7 +18,7 @@ create_input_overview <- function(file, name) {
 }
 
 plot_taxa_resolution <- function(phyloseq, 
-                             filename, 
+                             file = NULL, 
                              ranks = c('phylum', 'class', 'order', 'family', 'genus'),
                              absolute = FALSE,
                              sep = TRUE,
@@ -64,18 +64,13 @@ plot_taxa_resolution <- function(phyloseq,
     } else {
         k <- k
     }
-    # generate output path
-    output <- paste0("graphs/", filename, ".pdf")
-    # create output file
-    pdf(output)
-    plot(k)
-    dev.off()
-    # return location of output
-    return(output)
+    # write to file
+    if (!is.null(file)) ggsave(file)
+    return(k)
 }
 
 plot_grouped_abundance <- function(phyloseq, 
-                                   filename, 
+                                   file = NULL, 
                                    absolute = FALSE,
                                    sep = TRUE,
                                    length_group1 = 4, 
@@ -124,7 +119,6 @@ plot_grouped_abundance <- function(phyloseq,
     } else {
         df <- data2
     }
-    output <- paste0("graphs/", filename, ".pdf")
     # generate stacked or dodged plot
     k <- ggplot(df, aes(x = name, y = value, fill = group))
          # type of plot
@@ -146,15 +140,13 @@ plot_grouped_abundance <- function(phyloseq,
         guides(fill = guide_legend("Groups")) +    
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
         ggtitle(title)  
-    # generate plot file
-    pdf(output)
-        plot(k)
-    dev.off()
+    if (!is.null(file)) ggsave(file)
+    k
 }
 
 plot_database_count <- function(data, 
                                 names, 
-                                filename,                                    
+                                file = NULL,                                    
                                 sep = TRUE,
                                 length_group1 = 9, 
                                 length_group2 = 12,
@@ -178,8 +170,6 @@ plot_database_count <- function(data,
     } else {
         df <- data2
     }
-    # generate output path
-    output <- paste0("graphs/", filename, ".pdf")
     # generate  plot
     k <- ggplot(df, aes(x = name, y = value, fill= name))
     # type of plot
@@ -198,8 +188,7 @@ plot_database_count <- function(data,
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
         ggtitle(title)  
     # generate plot file
-    pdf(output)
-        plot(k)
-    dev.off()
+    if (!is.null(file)) ggsave(file)
+    k
 }
 
