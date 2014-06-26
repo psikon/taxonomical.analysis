@@ -66,18 +66,51 @@ dev.off()
 
 ###############################################################
 load.project()
-# Plot the most abundant Taxat per Habitat
-plot_most_abundant_per_habitat(bakteria, level = "phylum",threshold = 0.01,file = "graphs/most_abundant/habitat.phylum.pdf")
-plot_most_abundant_per_habitat(bakteria, level = "class",threshold = 0.01,file = "graphs/most_abundant/habitat.class.pdf")
-plot_most_abundant_per_habitat(bakteria, level = "order",threshold = 0.01,file = "graphs/most_abundant/habitat.order.pdf")
-plot_most_abundant_per_habitat(bakteria, level = "family",threshold = 0.01,file = "graphs/most_abundant/habitat.family.pdf")
-plot_most_abundant_per_habitat(bakteria, level = "genus",threshold = 0.01,file = "graphs/most_abundant/habitat.genus.pdf")
+# Plot the most abundant Taxa per Habitat
+plot_most_abundant_per_habitat(bakteria, level = "phylum", threshold = 0.01,
+                               file = "graphs/most_abundant/habitat.phylum.pdf")
+plot_most_abundant_per_habitat(bakteria, level = "class", threshold = 0.01,
+                               file = "graphs/most_abundant/habitat.class.pdf")
+plot_most_abundant_per_habitat(bakteria, level = "order", threshold = 0.01,
+                               file = "graphs/most_abundant/habitat.order.pdf")
+plot_most_abundant_per_habitat(bakteria, level = "family", threshold = 0.01,
+                               file = "graphs/most_abundant/habitat.family.pdf")
+plot_most_abundant_per_habitat(bakteria, level = "genus", threshold = 0.01,
+                               file = "graphs/most_abundant/habitat.genus.pdf")
+# Plot the most abundant taxa per Habitat with rarfied dataset
+plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "phylum",
+                               threshold = 0.01, file = "graphs/most_abundant/r_habitat.phylum.pdf")
+plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "class",
+                               threshold = 0.01, file = "graphs/most_abundant/r_habitat.class.pdf")
+plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "order",
+                               threshold = 0.01, file = "graphs/most_abundant/r_habitat.order.pdf")
+plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "family",
+                               threshold = 0.01, file = "graphs/most_abundant/r_habitat.family.pdf")
+plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "genus",
+                               threshold = 0.01, file = "graphs/most_abundant/habitat.genus.pdf")
+# plot most abundant taxa per sample
+plot_most_abundant_per_sample(bakteria, level = "phylum",threshold = 0.01,
+                              file = "graphs/most_abundant/sample.phylum.pdf")
+plot_most_abundant_per_sample(bakteria, level = "class",threshold = 0.01,
+                              file = "graphs/most_abundant/sample.class.pdf")
+plot_most_abundant_per_sample(bakteria, level = "order",threshold = 0.01,
+                              file = "graphs/most_abundant/sample.order.pdf")
+plot_most_abundant_per_sample(bakteria, level = "family",threshold = 0.01,
+                              file = "graphs/most_abundant/sample.family.pdf")
+plot_most_abundant_per_sample(bakteria, level = "genus",threshold = 0.01,
+                              file = "graphs/most_abundant/sample.genus.pdf")
 
-plot_most_abundant_per_sample(bakteria, level = "phylum",threshold = 0.01,file = "graphs/most_abundant/sample.phylum.pdf")
-plot_most_abundant_per_sample(bakteria, level = "class",threshold = 0.01,file = "graphs/most_abundant/sample.class.pdf")
-plot_most_abundant_per_sample(bakteria, level = "order",threshold = 0.01,file = "graphs/most_abundant/sample.order.pdf")
-plot_most_abundant_per_sample(bakteria, level = "family",threshold = 0.01,file = "graphs/most_abundant/sample.family.pdf")
-plot_most_abundant_per_sample(bakteria, level = "genus",threshold = 0.01,file = "graphs/most_abundant/sample.genus.pdf")
+# plot most abundant taxa per sample with raried data set
+plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "phylum", 
+                              threshold = 0.01, file = "graphs/most_abundant/r_sample.phylum.pdf")
+plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "class",
+                              threshold = 0.01, file = "graphs/most_abundant/r_sample.class.pdf")
+plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "order",
+                              threshold = 0.01, file = "graphs/most_abundant/r_sample.order.pdf")
+plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "family",
+                              threshold = 0.01, file = "graphs/most_abundant/r_sample.family.pdf")
+plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "genus",
+                              threshold = 0.01, file = "graphs/most_abundant/r_sample.genus.pdf")
 
 #################################################################
 
