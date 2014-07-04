@@ -17,14 +17,14 @@ create_input_overview <- function(file, name) {
     print(output)
 }
 
-plot_taxa_resolution <- function(phyloseq, 
-                             file = NULL, 
-                             ranks = c('phylum', 'class', 'order', 'family', 'genus'),
-                             absolute = FALSE,
-                             sep = TRUE,
-                             length_group1 = 5, 
-                             length_group2 = 6,
-                             title = "Resolution of OTUs") {
+plot.taxaResolution <- function(phyloseq, 
+                                file = NULL, 
+                                ranks = c('phylum', 'class', 'order', 'family', 'genus'),
+                                absolute = FALSE,
+                                sep = TRUE,
+                                length_group1 = 5, 
+                                length_group2 = 6,
+                                title = "Resolution of OTUs") {
     # create data.fram with taxonomic ranks per sample
     res <- sapply(rownames(sample_data(phyloseq)), function(x) {
         # generate for every sample a vector with numbers of taxonomic levels

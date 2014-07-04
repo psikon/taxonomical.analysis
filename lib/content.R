@@ -1,6 +1,8 @@
-plot_most_abundant_per_habitat <- function(phyloseq, level = "order", threshold = 0.01,
-                                           title = "Most abundant taxa per Holding Confition", 
-                                           file = NULL) {
+# create a plot with the most abundant species on the x axis 
+# seperated into the two habitats
+plot.mostAbundant.habitat <- function(phyloseq, level = "order", threshold = 0.01,
+                                      title = "Most abundant taxa per Holding Confition", 
+                                      file = NULL) {
     # reduce phyloseq object to level
     phyloseq <- tax_glom(phyloseq, level) 
     # select only the most abundance taxa by threshold
@@ -8,22 +10,23 @@ plot_most_abundant_per_habitat <- function(phyloseq, level = "order", threshold 
     wh1 <- genefilter_sample(phyloseq, f1, A = 1)
     phyloseq <- prune_taxa(wh1, phyloseq)
     # clean the taxa levels from underscore syntax
-    phyloseq <- remove_Underscore(phyloseq)
+    phyloseq <- rm.Underscore(phyloseq)
     # create a string for colorize the plot
     geom_str <- paste0("geom_bar(aes(color = ",level,", fill = ",level,"), stat = 'identity', position = 'stack')") 
     # draw plot
     p <- plot_bar(phyloseq, level, fill = level, facet_grid = ~HoldingCondition) + 
-         eval(parse(text = geom_str)) + xlab("Taxa") + ylab("Abundance") + ggtitle(title) +     
-         scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 10)) 
-    if(!is.null(file)) {
-        ggsave(file)
-    }
+        eval(parse(text = geom_str)) + xlab("Taxa") + ylab("Abundance") + ggtitle(title) +     
+        scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 10)) 
+    # save plot in file
+    if(!is.null(file)) ggsave(file)
     return(p)
 }
 
-plot_most_abundant_per_sample <- function(phyloseq, level = "order", threshold = 0.01,
-                                          title = "Most abundant taxa per Sample", 
-                                          file = NULL) {
+# create a plot with the samples on the x axis and the stacked abundance 
+# of the taxa on the y axis seperated under the two conditions
+plot.mostAbundant.sample <- function(phyloseq, level = "order", threshold = 0.01,
+                                     title = "Most abundant taxa per Sample", 
+                                     file = NULL) {
     # reduce phyloseq object to level
     phyloseq <- tax_glom(phyloseq, level) 
     # select only the most abundance taxa by threshold
@@ -31,15 +34,46 @@ plot_most_abundant_per_sample <- function(phyloseq, level = "order", threshold =
     wh1 <- genefilter_sample(phyloseq, f1, A = 1)
     phyloseq <-  prune_taxa(wh1, phyloseq)
     # clean the taxa levels from underscore syntax
-    phyloseq <- remove_Underscore(phyloseq)
+    phyloseq <- rm.Underscore(phyloseq)
     # create a string for colorize the plot
     geom_str <- paste0("geom_bar(aes(color = ",level,", fill = ",level,
                        "), stat = 'identity', position = 'stack')") 
     # draw plot
     p <- plot_bar(phyloseq, fill = level) + facet_wrap(~ HoldingCondition, scales="free_x") +
-         eval(parse(text = geom_str)) + xlab("Samples") + ylab("Abundance") + ggtitle(title) +     
-         scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 10)) 
+        eval(parse(text = geom_str)) + xlab("Samples") + ylab("Abundance") + ggtitle(title) +     
+        scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 10)) 
     # save to file
     if(!is.null(file)) ggsave(file)
+    
+    return(p)
+}
+
+# overwrites the standard phyloseq function plot_bar() to fullfit 
+# custom needs of some graphic issues
+plot_bar <- function(phyloseq, 
+                     file = NULL,
+                     level, 
+                     sep = "HoldingCondition",
+                     title = "Overview") {
+    
+    # remove the underscores from tax_table syntax
+    phyloseq <- rm.Underscore(phyloseq)
+    # create a geom string for dynamically selection of levels
+    geom <- paste0("geom_bar(aes(color = ", level ,", fill = ", level,
+                   "), stat = 'identity', position = 'stack')")
+    # create a facet_wrap string for dynamically selection of seperators
+    if (!is.null(sep)) {
+        facet <-  paste0("facet_wrap(~", sep, ", scales= 'free_x')")
+    } else {
+        facet <- ""
+    }
+    # create the barplot
+    p <- phyloseq::plot_bar(tax_glom(phyloseq, level), fill = level) 
+    # change some ggplot2 parameters
+    p <- p + eval(parse(text = geom)) + ggtitle(title) + theme_bw() + 
+        scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 15)) +
+        xlab("Abundance") + ylab("Sample") + eval(parse(text = ""))
+    
+    if(!is.null(file)) ggsave(file)  
     return(p)
 }

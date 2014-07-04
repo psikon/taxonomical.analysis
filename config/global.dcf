@@ -3,5 +3,5 @@ cache_loading: on
 munging: on
 logging: off
 load_libraries: on
-libraries: reshape, plyr, DESeq, DESeq2, edgeR, ggplot2, scales, stringr, lubridate, devtools, blastr, metaR, ncbi, reutils, rmisc, RSQLite, XML, biom, assertthat, iterators, foreach, doParallel, phyloseq, grid, vegan
+libraries: reshape, plyr, DESeq, VennDiagram, DESeq2, edgeR, ggplot2, scales, stringr, lubridate, devtools, blastr, metaR, ncbi, reutils, rmisc, RSQLite, XML, biom, assertthat, iterators, foreach, doParallel, phyloseq, grid, vegan
 data_tables: off

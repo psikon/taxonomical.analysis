@@ -1,20 +1,21 @@
-remove_taxa <- function(phylo, taxa) {
-    phylo <- prune_species(!grepl(paste0("\\<",taxa,"\\>"),labels(otu_table(phylo))[[1]]), phylo)
-    phylo
+rm.taxa <- function(phyloseq, taxa) {
+    phyloseq <- prune_species(!grepl(paste0("\\<", taxa, "\\>"),
+                                     labels(otu_table(phylo))[[1]]), phyloseq)
+    return(phyloseq)
 }
 
-remove_Underscore <- function(phyloseq) {
+rm.underscore <- function(phyloseq) {
     data <- tax_table(phyloseq)
     if(any(grepl("__", data))) {
         data <- substr(data, 4, length(data))
         data[which(data == "")] <- "not classified"
     }
     tax_table(phyloseq) <- data
-    phyloseq
+    return(phyloseq)
 }
 
 
-get_phylo_levels <- function(phyloseq, sample, ranks, absolute) {
+get.phyloLevels <- function(phyloseq, sample, ranks, absolute) {
     # get all otus with hits in otu_table from phyloseq object
     id <- which(get_taxa(phyloseq, sample) > 0)
     if (length(id) == 0) {

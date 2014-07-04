@@ -6,36 +6,58 @@ registerDoParallel(cores = 20)
 # colnames(mdf)[3] <- "Abundance"
 fixInNamespace(psmelt, pos = "package:phyloseq")
 
+############################################################
+################# initialize the data ######################
+############################################################
 
-#######################
-# init the data       #
-#######################
-
-# load all databases and metadata
-getMetadata()
-getConnections()
 # generate old dataset
-path <- generateBiomFile("bacterial.old")
-phylo.old <- generatePhyloseq("bacterial.old")
+path <- generate.biomFile("bacterial.old", data = get.DBcon.old(get.metadataList()))
+phylo.old <- generate.phyloseq("bacterial.old")
 
 # generate a biom file
-path <- generateBiomFile("bacterial.new", data = list(sample60.new, sample64.new,
-                                                      sample68.new, sample70.new,
-                                                      sample72.new, sample74.new,
-                                                      sample76.new, sample78.new,
-                                                      sample80.new, sample82.new))
+path <- generate.biomFile("bacterial.new", data = get.DBcon.new(get.metadataList()))
 # init the phyloseq object
-phylo.new <- generatePhyloseq("bacterial.new")
+phylo.new <- generate.phyloseq("bacterial.new")
 
 #############################################################
+######## Evaluation of different pipeline steps #############
+#############################################################
+load.project()
 
-# Evaluation of different pipeline steps
+plot.taxaResolution(phylo.new,
+                    file = "graphs/evaluation/taxa_res.abs.pdf",
+                    absolute = TRUE, sep = TRUE, 
+                    length_group1 = 3, length_group2 = 7,
+                    title = "Taxonomical Resolution per samples \n(abs)")
+plot.taxaResolution(phylo.new,
+                    file = "graphs/evaluation/taxa_res.perc.pdf",
+                    absolute = FALSE, sep = TRUE, 
+                    length_group1 = 3, length_group2 = 7,
+                    title = "Taxonomical Resolution per samples \n(percent)")
 
-source("evaluation_report.R")
+plot.groupedAbundance(phylo.new, 
+                      file = "graphs/evaluation/abundance.abs.pdf",
+                      absolute = TRUE, sep = TRUE,
+                      length_group1 = 3, length_group2 = 7,
+                      title = "Abundance in defined groups per sample\n(absolute)")
+plot.groupedAbundance(phylo.new, 
+                      file = "graphs/evaluation/abundance.abs.pdf",
+                      absolute = FALSE, sep = TRUE,
+                      length_group1 = 3, length_group2 = 7,
+                      title = "Abundance in defined groups per sample\n(percent)")
 
-#######################
-# General separations #
-#######################
+plot.DBcount(data = get.DBcon.new(get.metadataList()) , 
+             names = c("sample 60", "sample 64", "sample 68", "sample 70", 
+                       "sample 72", "sample 74", "sample 76", "sample 78", 
+                       "sample 80", "sample 82"), 
+             file = "graphs/evaluation/database_counts.pdf",
+             sep = TRUE, length_group1 = 3, length_group2 = 7,
+             title = "Hits in taxonomyReportDB per sample")
+
+############################################################
+################## General separations #####################
+############################################################
+load.project()
 
 # subset the phyloseq object based on taxonomy expressions
 fungi <- subset_taxa(phylo.new, superkingdom == "k__Eukaryota")
@@ -50,132 +72,124 @@ bakteria <- remove_taxa(bakteria, "2")
 bakteria
 
 #############################################################
+################### Rarefaction Curves ######################
+#############################################################
 load.project()
 
 # plot rarefaction curves
+plot.rareCurve(bakteria, stepsize = 20, file = "graphs/rarefaction/rareCurve.pdf")
 
-pdf("graphs/rarefaction/rarefaction_curve.pdf")
-    plot_rarefaction_curves(bakteria, 100)
-dev.off()
-pdf("graphs/rarefaction/rarefaction_curve.mariculture.pdf")
-    plot_rarefaction_curves(get_aqua(bakteria), 100)
-dev.off()
-pdf("graphs/rarefaction/rarefaction_curve.free.pdf")
-    plot_rarefaction_curves(get_free(bakteria), 10)
-dev.off()
+# rarefaction curve for mariculture samples 70 - 82
+plot.rareCurve(get_aqua(bakteria), stepsize = 20, 
+               file = "graphs/rarefaction/mariculture.rareCurve.pdf")
+
+# rarefaction curve for free living samples 60 - 68
+plot.rareCurve(get_free(bakteria), stepsize = 20,
+               file = "graphs/rarefaction/free_living.rareCurve.pdf")
 
 ###############################################################
+########### Most abundant Taxqa per Habitat/Sample ############
+###############################################################
 load.project()
-# Plot the most abundant Taxa per Habitat
-plot_most_abundant_per_habitat(bakteria, level = "phylum", threshold = 0.01,
-                               file = "graphs/most_abundant/habitat.phylum.pdf")
-plot_most_abundant_per_habitat(bakteria, level = "class", threshold = 0.01,
-                               file = "graphs/most_abundant/habitat.class.pdf")
-plot_most_abundant_per_habitat(bakteria, level = "order", threshold = 0.01,
-                               file = "graphs/most_abundant/habitat.order.pdf")
-plot_most_abundant_per_habitat(bakteria, level = "family", threshold = 0.01,
-                               file = "graphs/most_abundant/habitat.family.pdf")
-plot_most_abundant_per_habitat(bakteria, level = "genus", threshold = 0.01,
-                               file = "graphs/most_abundant/habitat.genus.pdf")
-# Plot the most abundant taxa per Habitat with rarfied dataset
-plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "phylum",
-                               threshold = 0.01, file = "graphs/most_abundant/r_habitat.phylum.pdf")
-plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "class",
-                               threshold = 0.01, file = "graphs/most_abundant/r_habitat.class.pdf")
-plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "order",
-                               threshold = 0.01, file = "graphs/most_abundant/r_habitat.order.pdf")
-plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "family",
-                               threshold = 0.01, file = "graphs/most_abundant/r_habitat.family.pdf")
-plot_most_abundant_per_habitat(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "genus",
-                               threshold = 0.01, file = "graphs/most_abundant/habitat.genus.pdf")
-# plot most abundant taxa per sample
-plot_most_abundant_per_sample(bakteria, level = "phylum",threshold = 0.01,
-                              file = "graphs/most_abundant/sample.phylum.pdf")
-plot_most_abundant_per_sample(bakteria, level = "class",threshold = 0.01,
-                              file = "graphs/most_abundant/sample.class.pdf")
-plot_most_abundant_per_sample(bakteria, level = "order",threshold = 0.01,
-                              file = "graphs/most_abundant/sample.order.pdf")
-plot_most_abundant_per_sample(bakteria, level = "family",threshold = 0.01,
-                              file = "graphs/most_abundant/sample.family.pdf")
-plot_most_abundant_per_sample(bakteria, level = "genus",threshold = 0.01,
-                              file = "graphs/most_abundant/sample.genus.pdf")
 
-# plot most abundant taxa per sample with raried data set
-plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "phylum", 
-                              threshold = 0.01, file = "graphs/most_abundant/r_sample.phylum.pdf")
-plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "class",
-                              threshold = 0.01, file = "graphs/most_abundant/r_sample.class.pdf")
-plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "order",
-                              threshold = 0.01, file = "graphs/most_abundant/r_sample.order.pdf")
-plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "family",
-                              threshold = 0.01, file = "graphs/most_abundant/r_sample.family.pdf")
-plot_most_abundant_per_sample(get_rarefied_phyloseq(bakteria, 1234, T, T), level = "genus",
-                              threshold = 0.01, file = "graphs/most_abundant/r_sample.genus.pdf")
+# create the rarefied phyloseq object from bakteria 
+# corresponding to the minimum number of reads
+rare.bak <- rarify.phyloseq(bakteria, rngseed = 1234, 
+                            replace = TRUE, trimOTUs = TRUE)
+
+# Plot the most abundant Taxa per Habitat with a rarefied dataset
+plot.mostAbundant.habitat(rare.bak, level = "phylum", threshold = 0.01,
+                          file = "graphs/most_abundant/habitat.phylum.pdf")
+plot.mostAbundant.habitat(rare.bak, level = "class", threshold = 0.01,
+                          file = "graphs/most_abundant/habitat.class.pdf")
+plot.mostAbundant.habitat(rare.bak, level = "order", threshold = 0.01,
+                          file = "graphs/most_abundant/habitat.order.pdf")
+plot.mostAbundant.habitat(rare.bak, level = "family", threshold = 0.01,
+                          file = "graphs/most_abundant/habitat.family.pdf")
+plot.mostAbundant.habitat(rare.bak, level = "genus", threshold = 0.01,
+                          file = "graphs/most_abundant/habitat.genus.pdf")
+
+# plot most abundant taxa per sample with a rarefied dataset
+plot.mostAbundant.sample(rare.bak, level = "phylum", threshold = 0.01,
+                         file = "graphs/most_abundant/sample.phylum.pdf")
+plot.mostAbundant.sample(rare.bak, level = "class", threshold = 0.01,
+                         file = "graphs/most_abundant/sample.class.pdf")
+plot.mostAbundant.sample(rare.bak, level = "order", threshold = 0.01,
+                         file = "graphs/most_abundant/sample.order.pdf")
+plot.mostAbundant.sample(rare.bak, level = "family", threshold = 0.01,
+                         file = "graphs/most_abundant/sample.family.pdf")
+plot.mostAbundant.sample(rare.bak, level = "genus", threshold = 0.01,
+                         file = "graphs/most_abundant/sample.genus.pdf")
 
 #################################################################
 
 # plot richness
-plot_richness_overview(bakteria, file = "graphs/richness/richness.samples.pdf", 
-                       measures = c("Observed", "Simpson", "Shannon","Fisher"), 
-                       rarefy = F)
-plot_richness_overview(bakteria, file = "graphs/richness/rarefy_richness.samples.pdf",
-                       measures = c("Observed", "Simpson", "Shannon","Fisher"),
-                       rarefy = T)
-richness <- get_richness(bakteria, 
-                         measures = c("Observed", "Simpson", "Shannon", "Fisher"), 
-                         rarefy = F) 
-rarefy_richness <- get_richness(bakteria, 
-                                measures = c("Observed", "Simpson", "Shannon", "Fisher"),
-                                rarefy = T)
+plot.overview.richness(rare.bak, file = "graphs/richness/richness.samples.pdf")
+
+# get a list of richniess indices per sample
+richness <- get.richness(rare.bak) 
+
+#############################################################
+################### Core Microbiome #########################
 #############################################################
 load.project()
 
-# Core Microbioms
+# create Core Microbiome
+all.core <- get.coreMicrobiome(rare.bak)
+free.core <- get.coreMicrobiome(get.free(rare.bak))
+aqua.core <- get.coreMicrobiome(get.aqua(rare.bak))
 
-all_core <- get_core_microbiom(bakteria)
-all_core.table <- get_core_table(all_core,"lists/core/core_all.list.txt")
-free_core <- get_core_microbiom(get_free(bakteria))
-free_core.table <- get_core_table(free_core,"lists/core/core_free.list.txt")
-aqua_core <- get_core_microbiom(get_aqua(bakteria))
-aqua_core.table <- get_core_table(aqua_core,"lists/core/core_aqua.list.txt")
-plot_core_venn(bakteria,"graphs/core microbiom/free_vs_aqua_venn")
+# create lists of all OTUs in Core Microbiome
+all.core.table <- get.coreTable(all.core, "lists/core/core.all.txt")
+free.core.table <- get.coreTable(free.core, "lists/core/core.free.list.txt")
+aqua.core.table <- get.coreTable(aqua.core, "lists/core/core.aqua.list.txt")
 
-pdf("graphs/all_core.pdf")
-    plot_bar(tax_glom(all_core,"class"),fill="class")
-dev.off()
+# make a Venn Diagram free living core microbiome vs. mariculture core microbiome
+plot.coreMicrobiome(rare.bak, file = "graphs/core/core.venn.tiff")
 
-pdf("graphs/aqua_core.pdf")
-    plot_bar(tax_glom(aqua_core,"class"),fill="class")
-dev.off()
+# plot the content of the different core microbiome at phylum level
+plot_bar(all.core, file = "graphs/core/all.core.phylum.pdf", 
+         level = "phylum", title = "Core Microbiome at\n phylum level")
+plot_bar(free.core, file = "graphs/core/free.core.phylum.pdf", 
+         level = "phylum", title = "Core Microbiome of free living samples \nat phylum level")
+plot_bar(aqua.core, file = "graphs/core/aqua.core.phylum.pdf", 
+         level = "phylum", title = "Core Microbiome of mariculture samples \nat phylum level")
 
-# Singletons
-single_one_sample <- get_singletons(phyloseq = bakteria,
-                                    num_samples = 1,
-                                    remove_samples = TRUE)
-single_two_sample <- get_singletons(phyloseq = bakteria,
-                                    num_samples = 2,
-                                    remove_samples = TRUE)
+# create phyloseq objects containing only singletons
+singleton.one <- get.singleton.phyloseq(phyloseq = rare.bak,
+                                        num_samples = 1,
+                                        rm_samples = TRUE)
+singleton.two <- get.singleton.phyloseq(phyloseq = rare.bak,
+                                        num_samples = 2,
+                                        rm_samples = TRUE)
 
+# plot the content of the different singletons at phylum level 
+plot_bar(singleton.one, file = "graphs/core/single.one.phylum.pdf",
+         level = "phylum", title = "Singletons on phylum level\n(occurence: max 1 sample)")
+plot_bar(singleton.two, file = "graphs/core/single.two.phylum.pdf",
+         level = "phylum", title = "Singletons on phylum level\n(occurence: max 2 samples")
 
-get_singleton_list(phyloseq = single_one_sample,
-                   file = "lists/singletons/singletons.one_sample.txt")
-get_singleton_list(phyloseq = single_two_sample,
-                   file = "lists/singletons/singletons.two_sample.txt")
+# save the singletons as a defined data.frame and a tab seperated file
+singleton.one.list <- get.singleton.list(phyloseq = singleton.one,
+                                         file = "lists/singletons/singletons.one_sample.txt")
+singleton.two.list <- get.singleton.list(phyloseq = singleton.two,
+                                         file = "lists/singletons/singletons.two_sample.txt")
 
 ##################################################################
+############### Ordination between smaples/OTUs ##################
+##################################################################
+load.project()
 
 # ordination distance between samples
-
-ord.samples <- ordination_preprocess(bakteria, hits = 5, num_samples = 0.5, 
-                                     level="genus", num_best = 5)
-plot_ordination_Samples(get_rarefied_phyloseq(bakteria), file = "graphs/ordination/ord.sample.phylum5.pdf",
+plot.ordination.samples(rare.bak,  
+                        file = "graphs/ordination/ordination.sample.phylum.MDS.pdf",
                         method = "MDS", distance = "jaccard",
-                        level = "phylum", title = "Ordination of Samples by 5 best phyla")
+                        hits = 5, num_samples = 0.5, num_best = 5,
+                        level = "phylum", title = "Ordination of Samples\n(phylum level)")
 
 # ordination between OTUs
-ord.otus <- ordination_preprocess(bak, hits = 5, num_samples= 0.5, level = "class", num_best = 10)
-plot_ordination_OTUs(bakteria, file = "graphs/ordination/ord.otus.class10.pdf",
-                     level = "class", title = "Ordination of OTUs by 10 best class", 
-                     facet = T, sep = 5)
-
+plot.ordination.OTUs(rare.bak, file = "graphs/ordination/ord.otus.phylum.pdf",
+                     hits = 5, num_samples = 0.5, num_best = 5, 
+                     level = "phylum", title = "Ordination of OTUs by 10 best class", 
+                     facet = T, sep = 4)
 

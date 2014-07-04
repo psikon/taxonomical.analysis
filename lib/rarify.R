@@ -1,4 +1,7 @@
-plot_rarefaction_curves <- function(phyloseq, stepsize) {
+# create rarefaction curves for the given pghyloseq object, 
+# where the number of OTUs against the number of used reads is used 
+# to show a hopefully a saturation over all samples 
+plot.rareCurve <- function(phyloseq, stepsize, file = NULL) {
     
     # parse important variables from phyloseq object
     # transposed abundance table (taxa are cols) 
@@ -13,8 +16,8 @@ plot_rarefaction_curves <- function(phyloseq, stepsize) {
     out <- lapply(seq_len(num_samples), function(i) {
         n <- seq(1, hits[i], by = stepsize)
         if(n[length(n)] != hits[i])
-            n <- c(n,hits[i])
-        drop(rarefy(abundance[i,], n))
+            n <- c(n, hits[i])
+        drop(rarefy(abundance[i, ], n))
     })
     # convert the object for ggplot2 purposes
     # 1. convert all length of lists in out object to same length 
@@ -55,23 +58,39 @@ plot_rarefaction_curves <- function(phyloseq, stepsize) {
     h <- as.numeric(h[which.min(v)])
     # get sample with minimal number of sequences
     v <- as.numeric(v[which.min(v)])
-    res2 <- cbind(res2,h,v)
+    res2 <- cbind(res2, h, v)
     # create plot the plot 
     p <- ggplot(res2, aes(x = seqs, y = value, colour = SampleName)) +
-            geom_line(size = 1) +
-            scale_x_continuous("\nNumber of Sequences", 
-                            breaks = pretty_breaks(n = 10)) +
-            scale_y_continuous("\nObserved species", 
-                            breaks = pretty_breaks(n = 10)) +
-            ggtitle("Rarefaction Curves") + 
-            geom_hline(aes(yintercept = h), color = "grey") +
-            geom_vline(aes(xintercept = v), color = "grey")
-    p
+        geom_line(size = 1) +
+        scale_x_continuous("\nNumber of Sequences", 
+                           breaks = pretty_breaks(n = 10)) +
+        scale_y_continuous("\nObserved species", 
+                           breaks = pretty_breaks(n = 10)) +
+        ggtitle("Rarefaction Curves") + theme_bw() +
+        geom_hline(aes(yintercept = h), color = "grey") +
+        geom_vline(aes(xintercept = v), color = "grey")
+    if(!is.null(file)) ggsave(file)
+    return(p)
 }
 
-get_rarefied_phyloseq <- function(phyloseq, rngseed = 1234, replace = F, trimOTUs = T) {
-    rarefy_even_depth(phyloseq, min(sample_sums(phyloseq)),
-                      rngseed = rngseed, replace = replace, 
-                      trimOTUs = trimOTUs, verbose = F)
+# wrapper for the phyloseq::rarefy_even_depth function with needed parameters set
+rarify.phyloseq <- function(phyloseq, rngseed = 1234, replace = F, trimOTUs = T) {
+    return(rarefy_even_depth(phyloseq, min(sample_sums(phyloseq)),
+                             rngseed = rngseed, replace = replace, 
+                             trimOTUs = trimOTUs, verbose = F))
 }
 
+Rrarefy <- function(x, sample) {
+    replace <- if (sample > min(rowSums(x))) TRUE else FALSE
+    sample <- rep(sample, length = nrow(x))
+    colnames(x) <- colnames(x, do.NULL = FALSE)
+    nm <- colnames(x)
+    for (i in seq_len(nrow(x))) {
+        row <- sample(rep(nm, times = x[i, ]), size = sample[i], replace = replace)
+        row <- table(row)
+        ind <- names(row)
+        x[i, ] <- 0
+        x[i, ind] <- row
+    }
+    x
+}
