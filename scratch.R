@@ -80,11 +80,11 @@ load.project()
 plot.rareCurve(bakteria, stepsize = 20, file = "graphs/rarefaction/rareCurve.pdf")
 
 # rarefaction curve for mariculture samples 70 - 82
-plot.rareCurve(get_aqua(bakteria), stepsize = 20, 
+plot.rareCurve(get.aqua(bakteria), stepsize = 20, 
                file = "graphs/rarefaction/mariculture.rareCurve.pdf")
 
 # rarefaction curve for free living samples 60 - 68
-plot.rareCurve(get_free(bakteria), stepsize = 20,
+plot.rareCurve(get.free(bakteria), stepsize = 20,
                file = "graphs/rarefaction/free_living.rareCurve.pdf")
 
 ###############################################################
@@ -121,7 +121,10 @@ plot.mostAbundant.sample(rare.bak, level = "family", threshold = 0.01,
 plot.mostAbundant.sample(rare.bak, level = "genus", threshold = 0.01,
                          file = "graphs/most_abundant/sample.genus.pdf")
 
-#################################################################
+#############################################################
+################# Richness per Sample #######################
+#############################################################
+load.project()
 
 # plot richness
 plot.overview.richness(rare.bak, file = "graphs/richness/richness.samples.pdf")
@@ -183,13 +186,13 @@ load.project()
 # ordination distance between samples
 plot.ordination.samples(rare.bak,  
                         file = "graphs/ordination/ordination.sample.phylum.MDS.pdf",
-                        method = "MDS", distance = "jaccard",
+                        method = "NMDS", distance = "bray",
                         hits = 5, num_samples = 0.5, num_best = 5,
                         level = "phylum", title = "Ordination of Samples\n(phylum level)")
 
 # ordination between OTUs
 plot.ordination.OTUs(rare.bak, file = "graphs/ordination/ord.otus.phylum.pdf",
                      hits = 5, num_samples = 0.5, num_best = 5, 
-                     level = "phylum", title = "Ordination of OTUs by 10 best class", 
+                     level = "phylum", title = "Ordination of OTUs\n(phylum level)", 
                      facet = T, sep = 4)
 

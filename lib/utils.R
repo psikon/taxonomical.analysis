@@ -27,7 +27,7 @@ get.phyloLevels <- function(phyloseq, sample, ranks, absolute) {
     }
     # get number of each taxonomic level 
     res <-  sapply(ranks, function(x){
-        get_level_count(otus, x)
+        get.levelCount(otus, x)
     })
     if(!absolute) {
         # convert values to percent 
@@ -36,7 +36,7 @@ get.phyloLevels <- function(phyloseq, sample, ranks, absolute) {
     return(res)
 }
 
-get_level_count <- function(tax_table, level) {
+get.levelCount <- function(tax_table, level) {
     if(is.null(tax_table)) {
         # no otus found
         x <- 0 
@@ -63,50 +63,53 @@ as.percent <- function(x) {
     return(y)
 }
 
-get_free <- function(phyloseq) {
-    subset_samples(phyloseq, HoldingCondition == "free living")
+get.free <- function(phyloseq) {
+    return(subset_samples(phyloseq, HoldingCondition == "free living"))
 }
 
-get_aqua <- function(phyloseq) {
-    subset_samples(phyloseq, HoldingCondition == "mariculture")
+get.aqua <- function(phyloseq) {
+    return(subset_samples(phyloseq, HoldingCondition == "mariculture"))
 }
 
-last_rank <- function(x) {
-    x <- tail(colnames(x[,sapply(strsplit(x,"*__"), function(y){
+last.rank <- function(x) {
+    x <- tail(colnames(x[, sapply(strsplit(x, "*__"), function(y){
+        length(y) > 1
+    })]), n = 1)
+    return(x)
+}
+
+last.taxa <- function(x) {
+    rank <- tail(colnames(x[, sapply(strsplit(x, "*__"), function(y){
         length(y)>1
-    })]),n=1)
-    x
-}
-
-last_taxa <- function(x) {
-    rank <- tail(colnames(x[,sapply(strsplit(x,"*__"), function(y){
-        length(y)>1
-    })]),n=1)
+    })]), n = 1)
     x <- unlist(str_split(x[,rank],"__"))[2]
-    x
+    return(x)
 }
 
-get_richness_theme <- function() {
-    ggtheme_alpha <- theme_bw() + theme(
-                                    legend.position="top",
-                                    legend.text = element_text(size = 10),
-                                    legend.title = element_text(size = 12),
-                                    axis.text = element_text(size = 8),
-                                    axis.title = element_text(size = 12),
-                                    strip.text = element_text(size = 12),
-                                    plot.margin = unit(c(0.025,0.025,.025,0.025), "npc"),
-                                    axis.text.x = element_text(face = "italic", size=rel(1), 
-                                                               angle = 30, hjust = 1, 
-                                                               vjust = 1),
-                                    axis.title = element_text(size=rel(1), lineheight=1.5),
-                                    legend.key = element_rect(colour = "white")
+get.richnessTheme <- function() {
+    ggtheme.alpha <- theme_bw() + theme(
+                                        legend.position = "top",
+                                        legend.text = element_text(size = 10),
+                                        legend.title = element_text(size = 12),
+                                        axis.text = element_text(size = 8),
+                                        axis.title = element_text(size = 12),
+                                        strip.text = element_text(size = 12),
+                                        plot.margin = unit(c(0.025,0.025,.025,0.025), "npc"),
+                                        axis.text.x = element_text(face = "italic", 
+                                                                   size=rel(1), 
+                                                                   angle = 30, 
+                                                                   hjust = 1, 
+                                                                   vjust = 1),
+                                        axis.title = element_text(size=rel(1), 
+                                                                  lineheight=1.5),
+                                        legend.key = element_rect(colour = "white")
                                     )
-    ggtheme_alpha
+    return(ggtheme.alpha)
 }
 
 countArtifacts <- function(phyloseq, sample) {
     with <- subset_taxa(phyloseq, superkingdom == 'k__Bacteria')
-    without <- remove_taxa(with, "2")
+    without <- rm.taxa(with, "2")
     countReads(with, as.character(sample)) - countReads(without, as.character(sample))
 }
 
@@ -116,6 +119,6 @@ countReads <- function(phyloseq, sample) {
 }
 
 getOTUs <- function(phyloseq, sample) {
-    length(which(otu_table(phyloseq)[,as.character(sample)]>0)==TRUE)
+    return(length(which(otu_table(phyloseq)[, as.character(sample)] > 0) == TRUE))
 }
 

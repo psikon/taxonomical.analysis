@@ -10,11 +10,11 @@ plot.mostAbundant.habitat <- function(phyloseq, level = "order", threshold = 0.0
     wh1 <- genefilter_sample(phyloseq, f1, A = 1)
     phyloseq <- prune_taxa(wh1, phyloseq)
     # clean the taxa levels from underscore syntax
-    phyloseq <- rm.Underscore(phyloseq)
+    phyloseq <- rm.underscore(phyloseq)
     # create a string for colorize the plot
     geom_str <- paste0("geom_bar(aes(color = ",level,", fill = ",level,"), stat = 'identity', position = 'stack')") 
     # draw plot
-    p <- plot_bar(phyloseq, level, fill = level, facet_grid = ~HoldingCondition) + 
+    p <- phyloseq::plot_bar(phyloseq, level, fill = level, facet_grid = ~HoldingCondition) + 
         eval(parse(text = geom_str)) + xlab("Taxa") + ylab("Abundance") + ggtitle(title) +     
         scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 10)) 
     # save plot in file
@@ -34,12 +34,12 @@ plot.mostAbundant.sample <- function(phyloseq, level = "order", threshold = 0.01
     wh1 <- genefilter_sample(phyloseq, f1, A = 1)
     phyloseq <-  prune_taxa(wh1, phyloseq)
     # clean the taxa levels from underscore syntax
-    phyloseq <- rm.Underscore(phyloseq)
+    phyloseq <- rm.underscore(phyloseq)
     # create a string for colorize the plot
     geom_str <- paste0("geom_bar(aes(color = ",level,", fill = ",level,
                        "), stat = 'identity', position = 'stack')") 
     # draw plot
-    p <- plot_bar(phyloseq, fill = level) + facet_wrap(~ HoldingCondition, scales="free_x") +
+    p <- phyloseq::plot_bar(phyloseq, fill = level) + facet_wrap(~ HoldingCondition, scales="free_x") +
         eval(parse(text = geom_str)) + xlab("Samples") + ylab("Abundance") + ggtitle(title) +     
         scale_y_continuous(labels = comma, breaks = pretty_breaks(n = 10)) 
     # save to file
@@ -57,7 +57,7 @@ plot_bar <- function(phyloseq,
                      title = "Overview") {
     
     # remove the underscores from tax_table syntax
-    phyloseq <- rm.Underscore(phyloseq)
+    phyloseq <- rm.underscore(phyloseq)
     # create a geom string for dynamically selection of levels
     geom <- paste0("geom_bar(aes(color = ", level ,", fill = ", level,
                    "), stat = 'identity', position = 'stack')")

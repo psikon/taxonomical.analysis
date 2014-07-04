@@ -28,7 +28,7 @@ plot.taxaResolution <- function(phyloseq,
     # create data.fram with taxonomic ranks per sample
     res <- sapply(rownames(sample_data(phyloseq)), function(x) {
         # generate for every sample a vector with numbers of taxonomic levels
-        get_phylo_levels(phyloseq, x, ranks, absolute)
+        get.phyloLevels(phyloseq, x, ranks, absolute)
     })
     colnames(res) <- sample_data(phyloseq)$SampleName
     # convert data for ggplot2
@@ -69,16 +69,16 @@ plot.taxaResolution <- function(phyloseq,
     return(k)
 }
 
-plot_grouped_abundance <- function(phyloseq, 
-                                   file = NULL, 
-                                   absolute = FALSE,
-                                   sep = TRUE,
-                                   length_group1 = 4, 
-                                   length_group2 = 5,
-                                   title = "Grouped Abundance") {
+plot.groupedAbundance <- function(phyloseq, 
+                                  file = NULL, 
+                                  absolute = FALSE,
+                                  sep = TRUE,
+                                  length_group1 = 4, 
+                                  length_group2 = 5,
+                                  title = "Grouped Abundance") {
     
     # get a data.frame with grouped abundance values for every sample
-    res <- sapply(colnames(otu_table(phyloseq)),function(x) {
+    res <- sapply(colnames(otu_table(phyloseq)), function(x) {
         # convert otu_table to data.frame
         data <- as.data.frame(otu_table(phyloseq))
         #generate counts
@@ -86,17 +86,17 @@ plot_grouped_abundance <- function(phyloseq,
         if (absolute) {
             # for absolute values sum all findings for manuell groups
             df <- c("no hits" = counts$freq[which(counts$x == 0)],
-                    "1<x<10" = sum(counts$freq[which(counts$x>0 & counts$x<10)]),
-                    "10<x<100" = sum(counts$freq[which(counts$x>10 & counts$x<100)]),
-                    "100<x<1000" = sum(counts$freq[which(counts$x>100 & counts$x<1000)]),
-                    "x>1000" = sum(counts$freq[which(counts$x>1000)]))
+                    "1<x<10" = sum(counts$freq[which(counts$x > 0 & counts$x < 10)]),
+                    "10<x<100" = sum(counts$freq[which(counts$x > 10 & counts$x < 100)]),
+                    "100<x<1000" = sum(counts$freq[which(counts$x > 100 & counts$x < 1000)]),
+                    "x>1000" = sum(counts$freq[which(counts$x > 1000)]))
         } else {
             # for absolute values calculate percentage for manuell groups
-            df <- c("no hits" = counts$freq[which(counts$x == 0)]*100/sum(counts$freq),
-                    "1<x<10" = sum(counts$freq[which(counts$x>0 & counts$x<10)])*100/sum(counts$freq),
-                    "10<x<100" = sum(counts$freq[which(counts$x>10 & counts$x<100)])*100/sum(counts$freq),
-                    "100<x<1000" = sum(counts$freq[which(counts$x>100 & counts$x<1000)])*100/sum(counts$freq),
-                    "x>1000" = sum(counts$freq[which(counts$x>1000)])*100/sum(counts$freq))
+            df <- c("no hits" = counts$freq[which(counts$x == 0)] * 100/sum(counts$freq),
+                    "1<x<10" = sum(counts$freq[which(counts$x > 0 & counts$x < 10)]) * 100/sum(counts$freq),
+                    "10<x<100" = sum(counts$freq[which(counts$x > 10 & counts$x < 100)]) * 100/sum(counts$freq),
+                    "100<x<1000" = sum(counts$freq[which(counts$x > 100 & counts$x < 1000)]) * 100/sum(counts$freq),
+                    "x>1000" = sum(counts$freq[which(counts$x > 1000)]) * 100/sum(counts$freq))
         }
        
     })
@@ -141,19 +141,19 @@ plot_grouped_abundance <- function(phyloseq,
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
         ggtitle(title)  
     if (!is.null(file)) ggsave(file)
-    k
+    return(k)
 }
 
-plot_database_count <- function(data, 
-                                names, 
-                                file = NULL,                                    
-                                sep = TRUE,
-                                length_group1 = 9, 
-                                length_group2 = 12,
-                                title = "Number of Taxonomies") {
+plot.DBcount <- function(data, 
+                         names, 
+                         file = NULL,                                    
+                         sep = TRUE,
+                         length_group1 = 9, 
+                         length_group2 = 12,
+                         title = "Number of Taxonomies") {
     # get length of taxonomy table per sample
-    res <- sapply(data,function(x){
-        db_query(conn(x),"SELECT COUNT(*) from taxonomy",1)
+    res <- sapply(data, function(x) {
+        db_query(conn(x), "SELECT COUNT(*) from taxonomy", 1)
     })
     # name the rows like the databases
     names(res) <- names
@@ -189,6 +189,6 @@ plot_database_count <- function(data,
         ggtitle(title)  
     # generate plot file
     if (!is.null(file)) ggsave(file)
-    k
+    return(k)
 }
 
