@@ -11,11 +11,11 @@ fixInNamespace(psmelt, pos = "package:phyloseq")
 ############################################################
 
 # generate old dataset
-path <- generate.biomFile("bacterial.old", data = get.DBcon.old(get.metadataList()))
+path <- generate.biomFile("bacterial.old", data = get.DBConnection.old(get.metadata.list()))
 phylo.old <- generate.phyloseq("bacterial.old")
 
 # generate a biom file
-path <- generate.biomFile("bacterial.new", data = get.DBcon.new(get.metadataList()))
+path <- generate.biomFile("bacterial.new", data = get.DBConnection.new(get.metadata.list()))
 # init the phyloseq object
 phylo.new <- generate.phyloseq("bacterial.new")
 
@@ -41,12 +41,12 @@ plot.groupedAbundance(phylo.new,
                       length_group1 = 3, length_group2 = 7,
                       title = "Abundance in defined groups per sample\n(absolute)")
 plot.groupedAbundance(phylo.new, 
-                      file = "graphs/evaluation/abundance.abs.pdf",
+                      file = "graphs/evaluation/abundance.perc.pdf",
                       absolute = FALSE, sep = TRUE,
                       length_group1 = 3, length_group2 = 7,
                       title = "Abundance in defined groups per sample\n(percent)")
 
-plot.DBcount(data = get.DBcon.new(get.metadataList()) , 
+plot.DBcount(data = get.DBConnection.new(get.metadata.list()) , 
              names = c("sample 60", "sample 64", "sample 68", "sample 70", 
                        "sample 72", "sample 74", "sample 76", "sample 78", 
                        "sample 80", "sample 82"), 
@@ -66,7 +66,7 @@ virus <- subset_taxa(phylo.new, superkingdom == "k__Viruses")
 
 bakteria <- subset_taxa(phylo.new, superkingdom == 'k__Bacteria')
 # remove contamination
-bakteria <- remove_taxa(bakteria, "2")
+bakteria <- rm.taxa(bakteria, "2")
 # filter less abundant taxa
 #bakteria <- prune_taxa(taxa_sums(bakteria) > 3, bakteria)
 bakteria
@@ -86,6 +86,7 @@ plot.rareCurve(get.aqua(bakteria), stepsize = 20,
 # rarefaction curve for free living samples 60 - 68
 plot.rareCurve(get.free(bakteria), stepsize = 20,
                file = "graphs/rarefaction/free_living.rareCurve.pdf")
+
 
 ###############################################################
 ########### Most abundant Taxqa per Habitat/Sample ############
@@ -149,8 +150,12 @@ aqua.core.table <- get.coreTable(aqua.core, "lists/core/core.aqua.list.txt")
 
 # make a Venn Diagram free living core microbiome vs. mariculture core microbiome
 plot.coreMicrobiome(rare.bak, file = "graphs/core/core.venn.tiff")
+# plota rarefaction curve for core otus
+plot.rarifyCoreOtus(rare.bak, n = 50, steps = 20, 
+                    file = "graphs/core/core.rarefactionCurve.pdf",
+                    title = "Development of Core OTUs \n(Rarefaction Curve)")
 
-# plot the content of the different core microbiome at phylum level
+  # plot the content of the different core microbiome at phylum level
 plot_bar(all.core, file = "graphs/core/all.core.phylum.pdf", 
          level = "phylum", title = "Core Microbiome at\n phylum level")
 plot_bar(free.core, file = "graphs/core/free.core.phylum.pdf", 
@@ -179,7 +184,7 @@ singleton.two.list <- get.singleton.list(phyloseq = singleton.two,
                                          file = "lists/singletons/singletons.two_sample.txt")
 
 ##################################################################
-############### Ordination between smaples/OTUs ##################
+############### Ordination between samples/OTUs ##################
 ##################################################################
 load.project()
 
@@ -196,3 +201,20 @@ plot.ordination.OTUs(rare.bak, file = "graphs/ordination/ord.otus.phylum.pdf",
                      level = "phylum", title = "Ordination of OTUs\n(phylum level)", 
                      facet = T, sep = 4)
 
+##################################################################
+########### Differential OTUs deseq, deseq2, edgeR ###############
+##################################################################
+load.project()
+
+# deseq1
+plot.differential.OTUs(deseq.differential.OTUs(rare.bak, 6, alpha = 0.35), 
+                                   file = "graphs/differential/deseq.differential.pdf", 
+                                   origin = "deseq")
+# deseq2
+plot.differential.OTUs(deseq2.differential.OTUs(rare.bak, alpha = 0.1), 
+                       file = "graphs/differential/deseq2.differential.pdf", 
+                       origin = "deseq")
+# edgeR
+plot.differential.OTUs(edgeR.differential.OTUs(rare.bak, alpha = 0.2),
+                       file = "graphs/differential/edgeR.differential.pdf",
+                       origin = "edgeR")

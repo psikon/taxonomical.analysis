@@ -1,4 +1,5 @@
 # from phyloseq extension tutorial (http://joey711.github.io/phyloseq-extensions/DESeq.html)
+# import a phyloseq object to DESeq
 phyloseq_to_DESeq = function(physeq, designFactor, fitType = "local", locfunc = median, 
                              ...) {
     # Enforce Orientation
@@ -35,10 +36,9 @@ phyloseq_to_DESeq = function(physeq, designFactor, fitType = "local", locfunc = 
     cds = estimateDispersions(cds, fitType = fitType, ...)
     return(cds)
 }
-
+# from phyloseq extension tutorial (http://joey711.github.io/phyloseq-extensions/edgeR.html)
+# import a phyloseq object to edgeR
 phyloseq_to_edgeR = function(physeq, group, method = "RLE", ...) {
-    require("edgeR")
-    require("phyloseq")
     # Enforce orientation.
     if (!taxa_are_rows(physeq)) {
         physeq <- t(physeq)
@@ -69,86 +69,96 @@ phyloseq_to_edgeR = function(physeq, group, method = "RLE", ...) {
     return(estimateTagwiseDisp(estimateCommonDisp(z)))
 }
 
-plot_variance <- function(phyloseq, x.text = "log10(variance)", title = "Variance of OTUs" ) {
-  hist(log10(apply(otu_table(phyloseq),1, var)), xlab = x.text, main = title)
+# plot the variance structure of the OTUs to discover the right variance value for deseq
+plot.variance <- function(phyloseq, x.text = "log10(variance)", title = "Variance of OTUs" ) {
+  hist(log10(apply(otu_table(phyloseq), 1, var)), xlab = x.text, main = title)
 }
 
-deseq_differential_OTUs <- function(phyloseq, variance_threshold, alpha) {
+# import a phyloseq object to deseq and calculate the differential appearing OTUs
+deseq.differential.OTUs <- function(phyloseq, variance_threshold = 4, alpha = 0.2) {
+    # remove underscore syntax from phyloseq tax_table
+    phyloseq <- rm.underscore(phyloseq)
+    # remove OTUs not mapping criteria
     keepOTUs <- apply(otu_table(phyloseq), 1, var) > variance_threshold
     data <- prune_taxa(keepOTUs, phyloseq)
-    #create cds
+    #create deseq cds object
     cds <- suppressWarnings(phyloseq_to_DESeq(data, 
                                               "HoldingCondition", 
                                               sharingMode = "gene-est-only"))
+    # calculate test statistics
     res <- nbinomTest(cds, "free living", "mariculture")
+    # create significance table
     sigtab <- res[which(res$padj < alpha),]
     sigtab <- cbind(as(sigtab, "data.frame"), as(tax_table(data)[sigtab$id, ], "matrix"))
     sigtab <- sigtab[order(sigtab$padj),]
-    sigtab
+    return(sigtab)
 }
 
-plot_differences <- function(sigtab) {
+# import a phyloseq object to deseq2 and calculate the differential appearing OTUs
+deseq2.differential.OTUs <- function(phyloseq, alpha) {
+    # convert phyloseq object to deseq2 object
+    deseq2 <- suppressWarnings(phyloseq_to_deseq2(rm.underscore(phyloseq), ~HoldingCondition))
+    # calculate statistical test
+    deseq2 <- DESeq(deseq2, test = "Wald", fitType = "local")
+    # extract results from object
+    res <- results(deseq2)
+    # create significance table
+    sigtab <- res[which(res$padj < alpha),]
+    sigtab <-  cbind(as(sigtab,"data.frame"), 
+                     as(tax_table(rm.underscore(phyloseq))[rownames(sigtab), ], "matrix")) 
+    return(sigtab)
+}
+
+# import a phyloseq object to edgeR and calculate the differential appearing OTUs
+edgeR.differential.OTUs <- function(phyloseq, alpha) {
+    # convert ophyloseq object to edgeR object
+    dge <- phyloseq_to_edgeR(rm.underscore(phyloseq), "HoldingCondition")
+    # calculate statistics
+    et <- exactTest(dge)
+    # convert the object to usable structure
+    tt <- topTags(et, n = nrow(dge$table), adjust.method= "BH", sort.by = "PValue")
+    res <- tt@.Data[[1]]
+    sigtab = res[(res$FDR < alpha),]
+    sigtab = cbind(as(sigtab, "data.frame"), as(tax_table(rm.underscore(phyloseq))[rownames(sigtab), 
+                                                                    ], "matrix"))
+    return(sigtab)   
+}
+
+# plot the log2FoldChange of the differential appearing OTUs, calculated by deseq, deseq2 or edgeR object 
+plot.differential.OTUs <- function(sigtab, file = NULL, origin = "deseq") {
     theme_set(theme_bw())
     scale_fill_discrete <- function(palname = "Set1", ...) {
         scale_fill_brewer(palette = palname, ...)
     }
-    
-    # Phylum order
-    x <- tapply(sigtab$log2FoldChange, sigtab$phylum, function(x)
-        max(x))
-    x <- sort(x,TRUE)
-    sigtab$phylum <- factor(as.character(sigtab$phylum), levels = names(x))
-    
-    # Genus order
-    x <- tapply(sigtab$log2FoldChange, sigtab$genus, function(x)
-        max(x))
-    x <- sort(x,TRUE)
-    sigtab$genus <- factor(as.character(sigtab$genus), levels = names(x))
-    
-    ggplot(sigtab, 
-           aes(x = genus, y = log2FoldChange, color = phylum)) + 
-        geom_point(size = 3) + 
-        theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))
+    if (origin == "deseq") {
+        # Phylum order
+        x <- tapply(sigtab$log2FoldChange, sigtab$phylum, function(x)
+            max(x))
+        x <- sort(x,TRUE)
+        sigtab$phylum <- factor(as.character(sigtab$phylum), levels = names(x))
+        
+        # Genus order
+        x <- tapply(sigtab$log2FoldChange, sigtab$genus, function(x)
+            max(x))
+        x <- sort(x,TRUE)
+        sigtab$genus <- factor(as.character(sigtab$genus), levels = names(x))
+    } else if (origin == "edgeR") {
+        sigtab = subset(sigtab, !is.na(genus))
+        # Phylum order
+        x = tapply(sigtab$logFC, sigtab$phylum, function(x) max(x))
+        x = sort(x, TRUE)
+        sigtab$phylum = factor(as.character(sigtab$phylum), levels = names(x))
+        # Genus order
+        x = tapply(sigtab$logFC, sigtab$genus, function(x) max(x))
+        x = sort(x, TRUE)
+        sigtab$genus = factor(as.character(sigtab$genus), levels = names(x))
+        colnames(sigtab)[8] <- "log2FoldChange" 
+    }
+    # create the plot
+    p <- ggplot(sigtab, aes(x = genus, y = log2FoldChange, color = phylum)) + 
+         geom_point(size = 3) + 
+         theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))
+    # save plot to file
+    if(!is.null(file)) ggsave(file)
+    return(p)
 }
-
-deseq2_differntial_OTUs <- function(phyloseq, alpha) {
-    deseq2 <- suppressWarnings(phyloseq_to_deseq2(phyloseq, ~HoldingCondition))
-    deseq2 <- DESeq(deseq2, test = "Wald", fitType="local")
-    res <- results(deseq2)
-    sigtab <- res[which(res$padj < alpha),]
-    sigtab = cbind(as(sigtab,"data.frame"), 
-                   as(tax_table(phyloseq)[rownames(sigtab), ], "matrix")) 
-    sigtab
-}
-# deseq2 <- deseq2_differntial_OTUs(bakteria, 0.3)
-# plot_differences(deseq2)
-# dge <- phyloseq_to_edgeR(bakteria, "HoldingCondition")
-# dge
-# et = exactTest(dge)
-# et
-# tt = topTags(et, n = nrow(dge$table),adjust.method= "BH", sort.by = "PValue")
-# res = tt@.Data[[1]]
-# res
-# alpha = 0.003
-# sigtab = res[(res$FDR < alpha),]
-# sigtab = cbind(as(sigtab, "data.frame"), as(tax_table(bakteria)[rownames(sigtab), 
-#                                                                ], "matrix"))
-# dim(sigtab)
-# head(sigtab)
-# 
-# theme_set(theme_bw())
-# scale_fill_discrete <- function(palname = "Set1", ...) {
-#     scale_fill_brewer(palette = palname, ...)
-# }
-# sigtabgen = subset(sigtab, !is.na(genus))
-# # Phylum order
-# x = tapply(sigtabgen$logFC, sigtabgen$phylum, function(x) max(x))
-# x = sort(x, TRUE)
-# sigtabgen$phylum = factor(as.character(sigtabgen$phylum), levels = names(x))
-# # Genus order
-# x = tapply(sigtabgen$logFC, sigtabgen$genus, function(x) max(x))
-# x = sort(x, TRUE)
-# sigtabgen$genus = factor(as.character(sigtabgen$genus), levels = names(x))
-# ggplot(sigtabgen, aes(x = genus, y = logFC, color = phylum)) + geom_point(size = 3) + 
-#     theme(axis.text.x = element_text(angle = -90, hjust = 0, vjust = 0.5))
-

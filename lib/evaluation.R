@@ -1,5 +1,8 @@
 # functions for evaluation of the different steps of the usearch pipeline
 
+# [deprecated] 
+# create a plot, with the samples on the x axis and the number of input sequences on the y axis.
+# oriiginally developed for the uparse 16S pipeline
 create_input_overview <- function(file, name) {
     # create overview of 16S input
     res <- readLines(file)
@@ -17,6 +20,9 @@ create_input_overview <- function(file, name) {
     print(output)
 }
 
+# create a plot, showing the distribution of the taxonomical levels over the samples. 
+# on the x axis the samples will be appear with a dodged barplot showing the percantage 
+# or absolute numbers of the depth of the taxonomical hits 
 plot.taxaResolution <- function(phyloseq, 
                                 file = NULL, 
                                 ranks = c('phylum', 'class', 'order', 'family', 'genus'),
@@ -44,7 +50,7 @@ plot.taxaResolution <- function(phyloseq,
     } else {
         df <- data2
     }
-    
+    # create the plot
     k <- ggplot(df, aes(x = X2, y = value, fill = X1)) + 
         # type of plot
         geom_bar(stat = "identity", position = "dodge") + 
@@ -68,7 +74,9 @@ plot.taxaResolution <- function(phyloseq,
     if (!is.null(file)) ggsave(file)
     return(k)
 }
-
+# create a plot showing the distribution of the abundance table seperated in defined groups. 
+# on the x axis there is a dodged barplot for every sample showing the number of groups 
+# on the y axis.  
 plot.groupedAbundance <- function(phyloseq, 
                                   file = NULL, 
                                   absolute = FALSE,
@@ -143,7 +151,7 @@ plot.groupedAbundance <- function(phyloseq,
     if (!is.null(file)) ggsave(file)
     return(k)
 }
-
+# creat a plot showming the number of hits per sample in a taxonomyReportDB object
 plot.DBcount <- function(data, 
                          names, 
                          file = NULL,                                    

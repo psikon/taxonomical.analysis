@@ -4,6 +4,7 @@ generate.biomFile <- function(name, data = list(sample60.old, sample62.old, samp
                                                 sample78.old, sample80.old, sample82.old)){
     # generate biom object from databases and write it to disk
     biom <- to_biom(data)
+    # write the biom file disk
     write_biom(biom, biom_file = paste0("data/", name, ".biom"))
     return(paste0("data/", name, ".biom"))
 }

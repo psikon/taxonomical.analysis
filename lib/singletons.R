@@ -1,6 +1,9 @@
-get_singletons <- function(phyloseq, num_samples = 1, remove_samples = TRUE, filter = 2) {
+# reduce the phyloseq object to OTUs, that have hits only in 'num_samples'. 
+# the other OTUs will be removed and it is possible to also remove samples, 
+# that do not match this criteria. the result will be a new phyloseq object 
+get.singleton.phyloseq <- function(phyloseq, num_samples = 1, rm_samples = TRUE, filter = 2) {
     # get all rows not belonging to the core microbiom
-    non_zero <- rownames(otu_table(get_core_microbiom(phyloseq)))
+    non_zero <- rownames(otu_table(get.coreMicrobiome(phyloseq)))
     # reduce otu_table
     otu_tbl <- otu_table(phyloseq)[-which(rownames(otu_table(phyloseq)) %in% non_zero)]
     # reduce tax_table
@@ -22,7 +25,7 @@ get_singletons <- function(phyloseq, num_samples = 1, remove_samples = TRUE, fil
     # reduce tax_table to candidates
     tax_tbl <- tax_tbl[rownames(tax_tbl) %in%  names]
     # reduce the phyloseq object containing only samples with present singletons
-    if(remove_samples) {
+    if(rm_samples) {
         # get a list of samples without a hit
         samples <- which(unlist(lapply(colnames(data), 
                                        function(column) all(data[, column] == 0 ))
@@ -37,15 +40,20 @@ get_singletons <- function(phyloseq, num_samples = 1, remove_samples = TRUE, fil
                        sample_tbl,
                        tax_tbl)
     result <- prune_taxa(taxa_sums(result) > filter, result)
-    result
+    return(result)
 }
-
-get_singleton_list <- function(phyloseq, file = NULL, col.names = F, row.names = F) {
+# create a list of OTUs, that appear only in a number of samples. The list have the attributes:
+# tax.id          - taxonomical identifier of the NCBI taxonomy database 
+# scientific.name - scientific name of the NCBI taxonomy database
+# tax.rank        - taxonomical level of the NCBI taxonomy
+# samples         - sample id of the sample where the singleton appear
+# counts          - number of occurence in this specific sample
+get.singleton.list <- function(phyloseq, file = NULL, col.names = F, row.names = F) {
     # build a data frame with desired inormations
     data <- as.data.frame(t(sapply(seq_along(1:nrow(tax_table(phyloseq))), function(x) {
         c("tax id" = rownames(otu_table(phyloseq)[x]),
-          "scientific.name" = sub("_"," ",last_taxa(tax_table(phyloseq)[x])),
-          "tax.rank" = last_rank(tax_table(phyloseq)[x]),
+          "scientific.name" = sub("_"," ",last.taxa(tax_table(phyloseq)[x])),
+          "tax.rank" = last.rank(tax_table(phyloseq)[x]),
           "samples" = paste(colnames(otu_table(phyloseq)[x][, otu_table(phyloseq)[x] > 0]), 
                             sep = ",", collapse = ","),
           "counts"= paste(as.vector(otu_table(phyloseq)[x][, otu_table(phyloseq)[x] > 0]), 
@@ -58,5 +66,5 @@ get_singleton_list <- function(phyloseq, file = NULL, col.names = F, row.names =
     if(!is.null(file)) {
         write.table(data,file, sep="\t",quote = F, row.names=row.names,col.names=col.names)
     }
-    data 
+    return(data) 
 }

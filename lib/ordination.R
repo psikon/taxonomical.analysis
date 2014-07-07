@@ -1,5 +1,5 @@
 # create a plot containing the ordination of OTUs at a specific taxonomical level. 
-# the otus will be first filtered, using only OTUs with hits occuring 'num_samples' 
+# the otus will be filtered first, using only OTUs with hits occuring 'num_samples' 
 # and then the 'num_best' of them will be used
 plot.ordination.OTUs <- function(phyloseq, file = "graphs/ordination/ordinate.otus.pdf",
                                  method = "NMDS", distance = "bray", 
@@ -29,7 +29,9 @@ plot.ordination.OTUs <- function(phyloseq, file = "graphs/ordination/ordinate.ot
     if(!is.null(file)) ggsave(file)
     return(p)
 }
-   
+# create a plot containing the ordination of Samples at a specific taxonomical level. 
+# the otus of the samples will be filtered first, using only OTUs with hits occuring 'num_samples' 
+# and then the 'num_best' of them will be used
 plot.ordination.samples <- function(phyloseq, file = "graphs/ordination/ordinate.samples.pdf",
                                     method ="NMDS", distance="bray", 
                                     hits = 5, num_samples = 0.5, num_best = 5,
