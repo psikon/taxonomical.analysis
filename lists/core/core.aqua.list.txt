@@ -1,0 +1,48 @@
+1029823	Acinetobacter sp._P8-3-8	species	115	39	932	150	101	110	118
+1096546	Methylobacterium sp._GXF4	species	1162	437	383	882	891	670	793
+1110389	Verminephrobacter aporrectodeae	species	145	64	970	108	142	114	120
+1144305	Novosphingobium sp._AP12	species	223	65	14	242	121	198	218
+1144306	Rhizobium sp._AP16	species	1039	373	106	1114	1372	1267	1149
+1144307	Sphingobium sp._AP49	species	312	84	31	343	184	267	352
+1144311	Brevibacillus sp._CF112	species	57	6	11	22	14	44	59
+1144317	Acidovorax sp._CF316	species	2984	858	446	3166	2703	2894	2801
+1144326	Pseudomonas sp._GM24	species	205	58	40	165	205	197	128
+1144327	Pseudomonas sp._GM25	species	224	106	30	162	422	339	187
+1144337	Pseudomonas sp._GM78	species	1626	429	264	1919	1362	1569	1812
+1144338	Pseudomonas sp._GM79	species	1589	455	200	2180	2022	2379	1285
+1144342	Herbaspirillum sp._YR522	species	493	133	32	571	368	489	562
+1224	Proteobacteria	phylum	4250	6361	4307	4932	6568	8622	5199
+1236	Gammaproteobacteria	class	1879	572	587	1981	2696	2070	2211
+1292021	Kocuria sp._UCD-OTCP	species	814	175	110	952	694	737	1072
+1445	Bacillus alcalophilus	species	69	13	70	462	225	239	128
+1454	Bacillus azotoformans	species	1805	216	348	2902	1719	1611	1327
+171	Leptospira	genus	126	6	2	19	29	28	54
+173	Leptospira interrogans	species	7783	362	147	1517	1242	1430	1363
+174	Leptospira borgpetersenii	species	250	61	43	290	198	241	237
+1771	Mycobacterium phlei	species	7	2	2	6	3	3	5
+1773	Mycobacterium tuberculosis	species	12	3	39	18	2	12	16
+219301	Brachybacterium muris	species	65	14	12	1	14	11	30
+220685	Bacillus bataviensis	species	1830	572	181	1555	2227	1766	1455
+229204	Flavobacterium frigoris	species	492	96	154	192	116	290	394
+28211	Alphaproteobacteria	class	26	3	25	29	22	20	23
+286	Pseudomonas	genus	533	173	95	505	561	773	582
+28901	Salmonella enterica	species	4404	1321	486	5210	7615	5825	11247
+294	Pseudomonas fluorescens	species	476	144	65	86	560	234	409
+29507	Leptospira kirschneri	species	365	76	76	208	246	311	344
+317	Pseudomonas syringae	species	5671	1740	515	5168	5810	6110	5314
+33917	Microbacterium barkeri	species	53	22	433	58	44	44	65
+343	Xanthomonas translucens	species	2	2	1	10	2	1	6
+346	Xanthomonas citri	species	29	9	131	22	12	15	21
+356	Rhizobiales	order	11	23659	5237	20	2	4	9
+382	Sinorhizobium meliloti	species	180	4605	21220	152	128	109	153
+47951	Vibrio cyclitrophicus	species	13	6	6	15	6	8	11
+53413	Xanthomonas axonopodis	species	1691	493	269	5190	2153	1788	1598
+562	Escherichia coli	species	1	1	14	1	1	2	5
+645	Aeromonas salmonicida	species	33	16	213	51	31	36	34
+672	Vibrio vulnificus	species	12	11	151	25	16	16	26
+795665	Hydrogenophaga sp._PBC	species	377	118	60	418	325	412	432
+80840	Burkholderiales	order	101	29	962	114	75	101	118
+80864	Comamonadaceae	family	32	12	162	32	22	34	37
+85642	Vaccinium witches'-broom_phytoplasma	species	66	14	35	52	48	71	59
+85698	Achromobacter xylosoxidans	species	355	52	40	462	560	426	269
+964	Herbaspirillum seropedicae	species	71	8	233	35	25	38	26
