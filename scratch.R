@@ -27,31 +27,31 @@ load.project()
 plot.taxaResolution(phylo.new,
                     file = "graphs/evaluation/taxa_res.abs.pdf",
                     absolute = TRUE, sep = TRUE, 
-                    length_group1 = 3, length_group2 = 7,
+                    length_group1 = 4, length_group2 = 7,
                     title = "Taxonomical Resolution per samples \n(abs)")
 plot.taxaResolution(phylo.new,
                     file = "graphs/evaluation/taxa_res.perc.pdf",
                     absolute = FALSE, sep = TRUE, 
-                    length_group1 = 3, length_group2 = 7,
+                    length_group1 = 4, length_group2 = 7,
                     title = "Taxonomical Resolution per samples \n(percent)")
 
 plot.groupedAbundance(phylo.new, 
                       file = "graphs/evaluation/abundance.abs.pdf",
                       absolute = TRUE, sep = TRUE,
-                      length_group1 = 3, length_group2 = 7,
+                      length_group1 = 4, length_group2 = 7,
                       title = "Abundance in defined groups per sample\n(absolute)")
 plot.groupedAbundance(phylo.new, 
                       file = "graphs/evaluation/abundance.perc.pdf",
                       absolute = FALSE, sep = TRUE,
-                      length_group1 = 3, length_group2 = 7,
+                      length_group1 = 4, length_group2 = 7,
                       title = "Abundance in defined groups per sample\n(percent)")
 
 plot.DBcount(data = get.DBConnection.new(get.metadata.list()) , 
-             names = c("sample 60", "sample 64", "sample 68", "sample 70", 
+             names = c("sample 60", "sample 64", "sample 66","sample 68", "sample 70", 
                        "sample 72", "sample 74", "sample 76", "sample 78", 
                        "sample 80", "sample 82"), 
              file = "graphs/evaluation/database_counts.pdf",
-             sep = TRUE, length_group1 = 3, length_group2 = 7,
+             sep = TRUE, length_group1 = 4, length_group2 = 7,
              title = "Hits in taxonomyReportDB per sample")
 
 ############################################################
@@ -89,7 +89,7 @@ plot.rareCurve(get.free(bakteria), stepsize = 20,
 
 
 ###############################################################
-########### Most abundant Taxqa per Habitat/Sample ############
+########### Most abundant Taxa per Habitat/Sample ############
 ###############################################################
 load.project()
 
@@ -132,16 +132,16 @@ plot.overview.richness(rare.bak, file = "graphs/richness/richness.samples.pdf")
 
 # get a list of richniess indices per sample
 richness <- get.richness(rare.bak) 
-
+richness
 #############################################################
 ################### Core Microbiome #########################
 #############################################################
 load.project()
 
 # create Core Microbiome
-all.core <- get.coreMicrobiome(rare.bak)
-free.core <- get.coreMicrobiome(get.free(rare.bak))
-aqua.core <- get.coreMicrobiome(get.aqua(rare.bak))
+all.core <- get.coreMicrobiome(tax_glom(rare.bak, "genus"))
+free.core <- get.coreMicrobiome(tax_glom(get.free(rare.bak), "genus"))
+aqua.core <- get.coreMicrobiome(tax_glom(get.aqua(rare.bak), "genus"))
 
 # create lists of all OTUs in Core Microbiome
 all.core.table <- get.coreTable(all.core, "lists/core/core.all.txt")
@@ -149,25 +149,30 @@ free.core.table <- get.coreTable(free.core, "lists/core/core.free.list.txt")
 aqua.core.table <- get.coreTable(aqua.core, "lists/core/core.aqua.list.txt")
 
 # make a Venn Diagram free living core microbiome vs. mariculture core microbiome
-plot.coreMicrobiome(rare.bak, file = "graphs/core/core.venn.tiff")
+plot.coreMicrobiome(tax_glom(rare.bak, "genus"), file = "graphs/core/core.venn.tiff")
 # plota rarefaction curve for core otus
 plot.rarifyCoreOtus(rare.bak, n = 50, steps = 20, 
                     file = "graphs/core/core.rarefactionCurve.pdf",
                     title = "Development of Core OTUs \n(Rarefaction Curve)")
 
-  # plot the content of the different core microbiome at phylum level
+ # plot the content of the different core microbiome at phylum level
 plot_bar(all.core, file = "graphs/core/all.core.phylum.pdf", 
          level = "phylum", title = "Core Microbiome at\n phylum level")
+plot.taxonomy.graph(all.core,file = "graphs/core/all.core.content.pdf", level= "genus")
+
 plot_bar(free.core, file = "graphs/core/free.core.phylum.pdf", 
          level = "phylum", title = "Core Microbiome of free living samples \nat phylum level")
+plot.taxonomy.graph(free.core,file = "graphs/core/free.core.content.pdf",level= "genus")
+
 plot_bar(aqua.core, file = "graphs/core/aqua.core.phylum.pdf", 
          level = "phylum", title = "Core Microbiome of mariculture samples \nat phylum level")
+plot.taxonomy.graph(aqua.core,file = "graphs/core/aqua.core.content.pdf",level= "genus")
 
 # create phyloseq objects containing only singletons
-singleton.one <- get.singleton.phyloseq(phyloseq = rare.bak,
+singleton.one <- get.singleton.phyloseq(tax_glom(rare.bak,"genus"),
                                         num_samples = 1,
                                         rm_samples = TRUE)
-singleton.two <- get.singleton.phyloseq(phyloseq = rare.bak,
+singleton.two <- get.singleton.phyloseq(tax_glom(rare.bak,"genus"),
                                         num_samples = 2,
                                         rm_samples = TRUE)
 
@@ -207,14 +212,33 @@ plot.ordination.OTUs(rare.bak, file = "graphs/ordination/ord.otus.phylum.pdf",
 load.project()
 
 # deseq1
-plot.differential.OTUs(deseq.differential.OTUs(rare.bak, 6, alpha = 0.35), 
+plot.differential.OTUs(deseq.differential.OTUs(rare.bak, 6, alpha = 0.73), 
                                    file = "graphs/differential/deseq.differential.pdf", 
                                    origin = "deseq")
 # deseq2
-plot.differential.OTUs(deseq2.differential.OTUs(rare.bak, alpha = 0.1), 
+plot.differential.OTUs(deseq2.differential.OTUs(rare.bak, alpha = 0.998), 
                        file = "graphs/differential/deseq2.differential.pdf", 
                        origin = "deseq")
 # edgeR
 plot.differential.OTUs(edgeR.differential.OTUs(rare.bak, alpha = 0.2),
                        file = "graphs/differential/edgeR.differential.pdf",
                        origin = "edgeR")
+
+plot_heatmap(rm.underscore(tax_glom(rare.bak,"class")),
+             sample.label = "SampleName",
+             sample.order = "HoldingCondition",
+             taxa.label = "class",)
+
+##################################################################
+######### Function Analysis with blast2GO ########################
+##################################################################
+load.project()
+
+create.FastaFromTaxonomyReportDB(path = "data/functional", position = c(1,4,5),
+                                 fasta.files = c("data/functional/sample60.classify.fasta",
+                                                 "data/functional/sample68.classify.fasta",
+                                                 "data/functional/sample70.classify.fasta"))
+
+
+
+

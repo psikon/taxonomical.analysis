@@ -1,170 +1,80 @@
-108980	Acinetobacter ursingii	species	74,78	6,24
-1239	Firmicutes	phylum	64,74	2,2
-135623	Vibrionales	order	64,74	24,16
-150340	Vibrio sp._Ex25	species	64,74	1,2
-170673	Vibrio kanaloae	species	64	5
-186802	Clostridiales	order	60,64	1,2
-186804	Peptostreptococcaceae	family	60,74	1,3
-188144	Enterovibrio norvegicus	species	60,64	1,4
-190893	Vibrio coralliilyticus	species	64,74	4,1
-203492	Fusobacteriaceae	family	74	6
-217159	Clostridium carboxidivorans	species	60,64	1,2
-22	Shewanella	genus	64,74	96,13
-259537	Dechloromonas aromatica	species	74	10
-28090	Acinetobacter lwoffii	species	64,74	2,2
-28108	Alteromonas macleodii	species	60,64	1,22
-28173	Vibrio nigripulchritudo	species	64,74	5,7
-285	Comamonas testosteroni	species	74	9
-314289	Vibrio sp._AND4	species	64,74	7,3
-338	Xanthomonas	genus	68,74	1,7
-379	Rhizobium	genus	74,82	2,1
-40215	Acinetobacter junii	species	74	5
-428031	Moritella dasanensis	species	64,74	3,1
-53246	Pseudoalteromonas	genus	64	6
-56946	Afipia broomeae	species	60,76	1,2
-570	Klebsiella	genus	60,64	1,2
-60478	Shewanella amazonensis	species	64,74	2,3
-62153	Vibrio shilonii	species	64,82	3,2
-62322	Shewanella baltica	species	64,74	16,1
-648	Aeromonas caviae	species	60,64	1,7
-674	Vibrio mimicus	species	60,64	2,4
-723171	Vibrio genomosp._F10	species	64,74	4,3
-848	Fusobacterium	genus	60,74	2,10
-850	Fusobacterium mortiferum	species	60,74	1,7
-851	Fusobacterium nucleatum	species	64,74	1,3
-856	Fusobacterium varium	species	74,82	1,2
-861	Fusobacterium ulcerans	species	74	3
-963	Herbaspirillum	genus	74	7
-992012	Vibrio sp._HENC-03	species	60,64	1,34
-1056511	Photobacterium sp._AK15	species	64,74	1,5
-106648	Acinetobacter bereziniae	species	74	3
-1229204	Alphaproteobacteria	species	74	3
-135622	Alteromonadales	order	64,76	11,1
-137716	Bacteria	species	74	151
-1491	Clostridium botulinum	species	64,74	7,7
-169679	Clostridium saccharobutylicum	species	74	5
-192073	Shewanella denitrificans	species	64	6
-204038	Dickeya dadantii	species	64,74	2,2
-24	Shewanella putrefaciens	species	64	4
-271097	Shewanella sediminis	species	64	3
-271098	Shewanella halifaxensis	species	64	6
-287	Pseudomonas aeruginosa	species	74	9
-300	Pseudomonas mendocina	species	74	6
-316	Pseudomonas stutzeri	species	74	3
-327275	Shewanella sp._HN-41	species	64	3
-330	Pseudomonas pseudoalcaligenes	species	74	4
-34073	Variovorax paradoxus	species	74	67
-358220	Acidovorax sp._KKS102	species	64,74	2,2
-359303	Shewanella loihica	species	64,74	3,4
-36745	Clostridium saccharoperbutylacetonicum	species	64,74	4,1
-36834	Clostridium celatum	species	64,74	4,3
-384638	Firmicutes	species	64,74	1,3
-40214	Acinetobacter johnsonii	species	64,74	1,3
-40324	Stenotrophomonas maltophilia	species	74	4
-404011	Shewanella piezotolerans	species	64	10
-443143	Geobacter sp._M18	species	74	3
-457396	Clostridium sp._7_2_43FAA	species	64	3
-516074	Providencia burhodogranariea	species	64	6
-56812	Shewanella frigidimarina	species	64	11
-60217	Shewanella violacea	species	64	8
-60480	Shewanella sp._MR-4	species	64,74	3,1
-60961	Shewanella woodyi	species	64,74	10,6
-642	Aeromonas	genus	64,74	1,2
-70863	Shewanella oneidensis	species	64,74	3,4
-70864	Shewanella pealeana	species	64,82	6,1
-72000	Kocuria rhizophila	species	74	3
-74109	Photobacterium profundum	species	64	4
-75682	Oxalobacteraceae	family	74	6
-89152	Bacteria	species	74	4
-94122	Shewanella sp._ANA-3	species	64,74	2,2
-1144321	Pseudomonas sp._GM102	species	68	3
-1157679	Bacteria	species	74	8
-13690	Sphingobium yanoikuyae	species	74	6
-47920	Acidovorax delafieldii	species	74	6
-512030	Acidovorax sp._NO-1	species	74	6
-28216	Betaproteobacteria	class	70,74	1,136
-76892	Caulobacteraceae	family	74	3
-316997	Bacteria	species	74	65
-335659	Bradyrhizobium sp._S23321	species	74,76	2,5
-374	Bradyrhizobium	genus	76,80	19,2
-41294	Bradyrhizobiaceae	family	76,80	8,1
-103731	Saccharothrix espanaensis	species	74	3
-105560	Bacteria	species	74	138
-106589	Cupriavidus	genus	74	8
-106590	Cupriavidus necator	species	74	5
-1075768	Janthinobacterium sp._CG3	species	74	20
-1117409	Methyloversatilis sp._NVD	species	74	30
-1144315	Variovorax sp._CF313	species	74	18
-1144318	Polaromonas sp._CF318	species	74	15
-1144323	Pseudomonas sp._GM17	species	74	3
-1151122	Microbacterium sp._292MF	species	74	4
-1158291	Bacteria	species	74	17
-1164990	Bacteria	species	74	12
-1175306	Herbaspirillum sp._GW103	species	74	4
-119060	Burkholderiaceae	family	74	23
-119219	Cupriavidus metallidurans	species	74	10
-1198452	Janthinobacterium sp._HH01	species	74	35
-1249621	Cupriavidus sp._HMR-1	species	74	3
-146939	Azospira oryzae	species	74	5
-158899	Collimonas fungivorans	species	74	5
-164546	Cupriavidus taiwanensis	species	74	7
-179636	Alicycliphilus denitrificans	species	74	45
-192	Azospirillum brasilense	species	74	3
-216465	Polaromonas naphthalenivorans	species	74	8
-217511	Fulvimarina pelagi	species	74	4
-222	Achromobacter	genus	74	10
-232721	Acidovorax sp._JS42	species	74	5
-248026	Cupriavidus pinatubonensis	species	74	4
-28067	Bacteria	genus	74	154
-28068	Bacteria	species	74	78
-284016	Phenylobacterium zucineum	species	74	4
-296591	Polaromonas sp._JS666	species	74	5
-305	Ralstonia solanacearum	species	74	21
-311230	Burkholderia terrae	species	74	5
-311334	Chryseobacterium taeanense	species	74	22
-319003	Bradyrhizobium sp._WSM1253	species	74,76	2,1
-32008	Burkholderia	genus	74	30
-327160	Proteobacteria	species	74	4
-329	Ralstonia pickettii	species	74	5
-337	Burkholderia glumae	species	74	4
-34029	Bacteria	species	74	79
-34072	Variovorax	genus	74	5
-347483	Rhodanobacter spathiphylli	species	74	3
-364317	Verminephrobacter eiseniae	species	74	3
-36873	Burkholderia xenovorans	species	74	3
-378211	Methyloversatilis universalis	species	74	11
-412963	Burkholderia rhizoxinica	species	74	3
-43306	Pseudomonas denitrificans	species	74	4
-47229	Massilia timonae	species	74	15
-47671	Lautropia mirabilis	species	74	3
-48736	Ralstonia	genus	74	5
-491919	Brachymonas chironomi	species	74	3
-536	Chromobacterium violaceum	species	74	4
-549169	Pseudogulbenkiania ferrooxidans	species	74	3
-551936	Bradyrhizobium sp._STM_3809	species	74	3
-553088	Chitiniphilus shinanonensis	species	74	6
-563031	Prevotella sp._C561	species	74	3
-56458	Xanthomonas sacchari	species	74	3
-568394	Pseudogulbenkiania	genus	74	7
-62928	Azoarcus sp._BH72	species	74	8
-651143	Fibrella aestuarina	species	74,76	2,2
-666685	Rhodanobacter denitrificans	species	74	6
-72556	Achromobacter piechaudii	species	74	4
-742013	Delftia sp._Cs1-4	species	74	4
-75309	Rhodanobacter	genus	74	3
-758826	Acidovorax radicis	species	74	8
-80865	Delftia	genus	74	5
-80866	Delftia acidovorans	species	74	15
-80867	Acidovorax avenae	species	74	12
-80880	Hylemonella gracilis	species	74	5
-85643	Thauera sp._MZ1T	species	74	4
-864051	Proteobacteria	species	74	87
-87883	Burkholderia multivorans	species	74	4
-913	Nitrobacter winogradskyi	species	74	10
-915	Nitrosomonas europaea	species	74	3
-92003	Azoarcus toluclasticus	species	74	4
-926	Bacteria	species	74	4
-92645	Herbaspirillum frisingense	species	74	4
-94132	Ramlibacter tataouinensis	species	74	49
-94624	Bordetella petrii	species	74	3
-288000	Bradyrhizobium sp._BTAi1	species	76	4
+53246	Pseudoalteromonas	genus	64	free living	9
+204455	Rhodobacterales	order	66	free living	6
+516074	Providencia	genus	64	free living	6
+747	Pasteurella	genus	64	free living	3
+33964	Leuconostoc	genus	66	free living	3
+570	Klebsiella	genus	64,66	free living,free living	5,3
+1216470	Enterobacter	genus	64,66	free living,free living	4,19
+186804	Peptostreptococcaceae	family	64,74	free living,mariculture	4,6
+203492	Fusobacteriaceae	family	60,74	free living,mariculture	1,5
+428031	Moritella	genus	64,74	free living,mariculture	1,3
+554	Pectobacterium	genus	66,74	free living,mariculture	1,2
+102862	Proteus	genus	64,82	free living,mariculture	3,1
+135622	Alteromonadales	order	64,76	free living,mariculture	12,1
+314277	Marinomonas	genus	64,74	free living,mariculture	3,1
+384638	Clostridiales	order	64,74	free living,mariculture	1,4
+443143	Geobacter	genus	66,74	free living,mariculture	1,4
+506534	Rheinheimera	genus	64,74	free living,mariculture	2,3
+68909	Deinococcus	genus	64,74	free living,mariculture	1,2
+135621	Pseudomonadaceae	family	66,74	free living,mariculture	1,2
+220697	Thalassospira	genus	66,76	free living,mariculture	1,2
+473781	Sphingomonas	genus	66,74	free living,mariculture	1,3
+89184	Ruegeria	genus	64,74	free living,mariculture	1,2
+266	Paracoccus	genus	68,74	free living,mariculture	1,2
+38288	Corynebacterium	genus	66,76	free living,mariculture	1,2
+259537	Dechloromonas	genus	74	mariculture	5
+285	Comamonas	genus	74	mariculture	10
+102134	Desulfotomaculum	genus	74	mariculture	3
+137716	Ideonella sp._B508-1	genus	74	mariculture	161
+160808	Acidithiobacillus	genus	74	mariculture	10
+34073	Variovorax	genus	74	mariculture	76
+40324	Stenotrophomonas	genus	74	mariculture	6
+66269	Pantoea	genus	74	mariculture	4
+75682	Oxalobacteraceae	family	74	mariculture	14
+944547	Arcobacter	genus	82	mariculture	4
+1198452	Janthinobacterium	genus	74	mariculture	57
+47229	Massilia	genus	74	mariculture	11
+94132	Ramlibacter	genus	74	mariculture	40
+316997	Rubrivivax benzoatilyticus	genus	74	mariculture	69
+105560	Methylibium petroleiphilum	genus	74	mariculture	143
+107709	Opitutus terrae	genus	74	mariculture	5
+1097	Chlorobaculum	genus	74	mariculture	3
+1117409	Methyloversatilis	genus	74	mariculture	41
+1144318	Polaromonas	genus	74	mariculture	28
+1158291	Thiomonas sp._FB-6	genus	74	mariculture	8
+1164990	Richelia intracellularis	genus	74	mariculture	13
+119060	Burkholderiaceae	family	74	mariculture	20
+119219	Cupriavidus	genus	74	mariculture	51
+146939	Azospira	genus	74	mariculture	7
+1663	Arthrobacter	genus	74	mariculture	3
+179636	Alicycliphilus	genus	74	mariculture	48
+1883	Streptomyces	genus	74	mariculture	6
+191768	Plesiocystis	genus	74	mariculture	3
+192	Azospirillum	genus	74	mariculture	11
+278132	Loktanella	genus	74	mariculture	4
+28067	Bacteria	genus	74	mariculture	155
+28068	Rubrivivax gelatinosus	genus	74	mariculture	104
+283686	Kosakonia	genus	74	mariculture	3
+284016	Phenylobacterium	genus	74	mariculture	4
+305	Ralstonia	genus	74	mariculture	31
+311334	Chryseobacterium	genus	74	mariculture	24
+32008	Burkholderia	genus	74	mariculture	63
+34029	Leptothrix cholodnii	genus	74	mariculture	84
+363848	Dyella	genus	74	mariculture	4
+47671	Lautropia	genus	74	mariculture	3
+506	Alcaligenaceae	family	74	mariculture	4
+536	Chromobacterium	genus	74	mariculture	4
+568394	Pseudogulbenkiania	genus	74	mariculture	4
+666685	Rhodanobacter	genus	74	mariculture	10
+75	Caulobacter	genus	74	mariculture	5
+80866	Delftia	genus	74	mariculture	18
+80880	Hylemonella	genus	74	mariculture	14
+85643	Thauera	genus	74	mariculture	9
+92003	Azoarcus	genus	74	mariculture	15
+93217	Pandoraea	genus	74	mariculture	3
+94624	Bordetella	genus	74	mariculture	4
+649831	Actinoplanes	genus	70,82	mariculture,mariculture	2,1
+28216	Betaproteobacteria	class	70,74	mariculture,mariculture	1,129
+41294	Bradyrhizobiaceae	family	76,80	mariculture,mariculture	3,1
+68287	Mesorhizobium	genus	74,76	mariculture,mariculture	2,1
+913	Nitrobacter	genus	74,76	mariculture,mariculture	4,1

@@ -77,3 +77,20 @@ plot_bar <- function(phyloseq,
     if(!is.null(file)) ggsave(file)  
     return(p)
 }
+
+plot.taxonomy.graph <- function(phyloseq, file = NULL, level = "order", type = "phylogram") {
+    taxa <- as.data.frame(tax_table(rm.underscore(phyloseq)))
+    df <- taxa[, 2:which(colnames(taxa) == level)]
+    df <- df[-apply(df, 1, function(x){any("not classified" %in% x)}) == FALSE, ]
+    tree <- read.tree(text = df2newick(df, innerlabel = T))
+    if(!is.null(file)) pdf(file)
+    plot.phylo(tree, 
+               type = type, 
+               cex = 0.8, 
+               root.edge = T,
+               node.depth = 1,
+               label.offset = 0.5)
+    nodelabels(tree$node.label, adj = c(1,1.5), frame = "none", cex = 0.6)
+    if(!is.null(file)) dev.off()
+     
+}

@@ -142,3 +142,35 @@ getOTUs <- function(phyloseq, sample) {
     return(length(which(otu_table(phyloseq)[, as.character(sample)] > 0) == TRUE))
 }
 
+# from: Martin Turjak
+# at: http://stackoverflow.com/questions/15343338/
+# recursion function for newick string creation
+traverse <- function(a,i,innerl){
+    if(i < (ncol(df))){
+        alevelinner <- as.character(unique(df[which(as.character(df[,i])==a),i+1]))
+        desc <- NULL
+        if(length(alevelinner) == 1) (newickout <- traverse(alevelinner,i+1,innerl))
+        else {
+            for(b in alevelinner) desc <- c(desc,traverse(b,i+1,innerl))
+            il <- NULL; if(innerl==TRUE) il <- a
+            (newickout <- paste("(",paste(desc,collapse=","),")",il,sep=""))
+        }
+    }
+    else { (newickout <- a) }
+}
+
+# from: Martin Turjak
+# at: http://stackoverflow.com/questions/15343338/
+# data.frame to newick function
+df2newick <- function(df, innerlabel = FALSE) {
+    # determine root
+    alevel <- as.character(unique(df[,1]))
+    newick <- NULL
+    # traverse throug data.frame and create newick string
+    for(x in alevel) newick <- c(newick, traverse(x, 1, innerlabel))
+    # add outer strings
+    (newick <- paste("(",paste(newick,collapse=","),");",sep=""))
+    return(newick)
+}
+
+

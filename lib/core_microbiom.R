@@ -109,7 +109,7 @@ rarefy.coreOtus <- function(phyloseq, n = 1, raremax = NULL, nsteps = 1) {
         xr[[i]] <- replicate(n, {
             cat(".") # progress
             otu_table(phyloseq) <- otu_table(t(Rrarefy(phyloseq.mat, sample[i])), taxa_are_rows = TRUE)
-            core_otus(phyloseq)
+            coreOtus(phyloseq)
         }, simplify = FALSE)
         cat("\n") # progress
     }

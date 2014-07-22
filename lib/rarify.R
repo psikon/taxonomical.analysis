@@ -80,6 +80,7 @@ rarify.phyloseq <- function(phyloseq, rngseed = 1234, replace = F, trimOTUs = T)
                              trimOTUs = trimOTUs, verbose = F))
 }
 
+# overwritten Rrarefy function from vegan, used for rarefaction of the core microbiome
 Rrarefy <- function(x, sample) {
     replace <- if (sample > min(rowSums(x))) TRUE else FALSE
     sample <- rep(sample, length = nrow(x))
@@ -92,5 +93,5 @@ Rrarefy <- function(x, sample) {
         x[i, ] <- 0
         x[i, ind] <- row
     }
-    x
+    return(x)
 }

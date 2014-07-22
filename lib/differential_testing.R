@@ -89,9 +89,14 @@ deseq.differential.OTUs <- function(phyloseq, variance_threshold = 4, alpha = 0.
     res <- nbinomTest(cds, "free living", "mariculture")
     # create significance table
     sigtab <- res[which(res$padj < alpha),]
-    sigtab <- cbind(as(sigtab, "data.frame"), as(tax_table(data)[sigtab$id, ], "matrix"))
-    sigtab <- sigtab[order(sigtab$padj),]
-    return(sigtab)
+    if (nrow(sigtab) == 0) {
+        warning("Significance table is empty! May be alpha is to low?")
+        return(NULL)
+    } else {
+        sigtab <- cbind(as(sigtab, "data.frame"), as(tax_table(data)[sigtab$id, ], "matrix"))
+        sigtab <- sigtab[order(sigtab$padj),]
+        return(sigtab)
+    }
 }
 
 # import a phyloseq object to deseq2 and calculate the differential appearing OTUs
@@ -103,10 +108,15 @@ deseq2.differential.OTUs <- function(phyloseq, alpha) {
     # extract results from object
     res <- results(deseq2)
     # create significance table
-    sigtab <- res[which(res$padj < alpha),]
-    sigtab <-  cbind(as(sigtab,"data.frame"), 
-                     as(tax_table(rm.underscore(phyloseq))[rownames(sigtab), ], "matrix")) 
-    return(sigtab)
+    sigtab <- res[which(res$padj <= alpha), ]
+    if (nrow(sigtab) == 0) {
+        warning("Significance table is empty! May be alpha is to low?")
+        return(NULL)
+    } else {
+        sigtab <-  cbind(as(sigtab,"data.frame"), 
+                        as(tax_table(rm.underscore(phyloseq))[rownames(sigtab), ], "matrix")) 
+        return(sigtab)
+    }
 }
 
 # import a phyloseq object to edgeR and calculate the differential appearing OTUs
@@ -129,6 +139,9 @@ plot.differential.OTUs <- function(sigtab, file = NULL, origin = "deseq") {
     theme_set(theme_bw())
     scale_fill_discrete <- function(palname = "Set1", ...) {
         scale_fill_brewer(palette = palname, ...)
+    }
+    if(is.null(sigtab)) {
+        stop('significance table is empty')
     }
     if (origin == "deseq") {
         # Phylum order

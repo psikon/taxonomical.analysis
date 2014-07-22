@@ -56,12 +56,15 @@ get.singleton.list <- function(phyloseq, file = NULL, col.names = F, row.names =
           "tax.rank" = last.rank(tax_table(phyloseq)[x]),
           "samples" = paste(colnames(otu_table(phyloseq)[x][, otu_table(phyloseq)[x] > 0]), 
                             sep = ",", collapse = ","),
+          "environment" = paste(sample_data(phyloseq)[colnames(otu_table(phyloseq)[x][, otu_table(phyloseq)[x] > 0])]$HoldingCondition,
+                                sep = ",", collapse = ","),
           "counts"= paste(as.vector(otu_table(phyloseq)[x][, otu_table(phyloseq)[x] > 0]), 
                           sep = ",", collapse = ","))
     })))
     # adjust column names
     colnames(data) <- c("tax.id", "scientific.name", "tax.rank", 
-                        "samples", "counts")
+                        "samples", "environment", "counts")
+    data <- data[order(data$environment),]
     # save the data frame in a tab separeted file
     if(!is.null(file)) {
         write.table(data,file, sep="\t",quote = F, row.names=row.names,col.names=col.names)
