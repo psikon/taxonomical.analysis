@@ -1,0 +1,175 @@
+\documentclass{article}
+\usepackage{geometry}
+
+\geometry{a4paper, top = 25mm, left = 20mm, right = 20mm, bottom = 25mm,
+headsep=10mm, footskip = 10mm}
+\title{Taxonomical Analysis}
+%\subtitle{of Epinephelus fuscoguttatus}
+\author{Philipp Sehnert}
+
+\begin{document}
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+%have to be run every time, cache is not working for libraries
+<<loadLibaries,echo = FALSE, results = 'hide', message = FALSE, warning = FALSE>>=
+    library(ProjectTemplate)
+    load.project()
+@
+
+\section{Introduction}
+
+
+
+\section{Preparation of Sequences with meta-pipeline}
+
+\section{Generation of Blast databases}
+
+\section{}
+\subsection{Prepare the objects}
+
+\noindent First we have to convert the \textit{taxonomyReportDB} object created by \textbf{metaR} to a file in biom format by the following two functions.
+<<createObject, cache = TRUE>>=
+# generate a biom file
+path <- generate.biomFile("bacterial.new", 
+                          data = get.DBConnection.new(get.metadata.list()))
+# init the phyloseq object
+phylo.new <- generate.phyloseq("bacterial.new")
+@
+
+\noindent As a result we get a phyloseq object, containing all taxonomically classified sequences:
+<<phylo.new, echo = FALSE, warning = FALSE, message = FALSE>>=
+phylo.new
+@
+
+\noindent The next step is the seperation of the phyloseq object into three seperated groups of organims.
+
+<<fungi, warning = FALSE>>=
+fungi <- subset_taxa(phylo.new, superkingdom == "k__Eukaryota")
+fungi
+@
+\noindent As you can see there are not much hits classified as fungi. An analysis of this part make no sense, because of no statistical background. 
+
+<<virus, warning = FALSE>>=
+virus <- subset_taxa(phylo.new, superkingdom == "k__Viruses")
+virus
+@
+\noindent Also the classification results for viruses consists only of 2 taxa, so that they can be counted as artifacts.
+
+
+<<bakteria, cache = TRUE>>=
+bakteria <- subset_taxa(phylo.new, superkingdom == 'k__Bacteria')
+bakteria
+@
+\noindent But the taxonomical classification for bacterial taxa looks good enough for a depper analysis. 
+
+\noindent Before we can start the analysis we have to remove some contamination in our samples. After blasting the sequences we got some hits on \textit{Enterobacteria phage phiX 174}, resulting in numberus of hits reolving only to the highest rank (\textit{superkingdom}) of the taxonomy. These sequences can easily removed.
+<<filtering, cache = TRUE, warning = FALSE>>=
+bakteria <- rm.taxa(bakteria, "2")
+bakteria
+@
+
+\section{Evaluation}
+
+<<db_count, echo = FALSE, warning = FALSE, fig.path= 'figure/evaluation/', fig.cap = 'explain more'>>=
+plot.DBcount(data = get.DBConnection.new(get.metadata.list()) , 
+             names = c("sample 60", "sample 64", "sample 66","sample 68", "sample 70", 
+                       "sample 72", "sample 74", "sample 76", "sample 78", 
+                       "sample 80", "sample 82"), 
+             file = NULL, sep = TRUE, length_group1 = 4, length_group2 = 7,
+             title = "Hits in taxonomyReportDB per sample")
+@
+
+<<taxaResolution,echo=FALSE,warning=FALSE, out.width='6cm', out.height='6cm', fig.show='hold', fig.path= 'figure/evaluation/'>>=
+plot.taxaResolution(phylo.new, file = NULL, absolute = TRUE, sep = TRUE, 
+                    length_group1 = 4, length_group2 = 7, 
+                    title = "Taxonomical Resolution per samples \n(abs)")
+plot.taxaResolution(phylo.new, file = NULL, absolute = FALSE, sep = TRUE, 
+                    length_group1 = 4, length_group2 = 7,
+                    title = "Taxonomical Resolution per samples \n(percent)")
+
+<<hit_distribution,echo=FALSE,warning=FALSE, out.width='6cm', out.height='6cm', fig.show='hold', fig.path= 'figure/evaluation/'>>=
+plot.groupedAbundance(phylo.new, file = NULL, absolute = TRUE, sep = TRUE,
+                      length_group1 = 4, length_group2 = 7,
+                      title = "Abundance in defined groups per sample\n(absolute)")
+plot.groupedAbundance(phylo.new, file = NULL, absolute = FALSE, sep = TRUE,
+                      length_group1 = 4, length_group2 = 7,
+                      title = "Abundance in defined groups per sample\n(percent)")
+@
+
+\section{Rarefaction}
+<<rarecurve, echo=FALSE,warning=FALSE, fig.path= 'figure/rarefaction/'>>=
+plot.rareCurve(bakteria, stepsize = 20, file = NULL)
+@
+
+<<rare_free_vs_mari, echo=FALSE, warning=FALSE, out.width='6cm', out.height='6cm', fig.show='hold', fig.path= 'figure/rarefaction/'>>=
+plot.rareCurve(get.aqua(bakteria), stepsize = 20, file = NULL)
+plot.rareCurve(get.free(bakteria), stepsize = 20, file = NULL)
+@
+
+<<rarefy, cache=TRUE>>=
+rare.bak <- rarify.phyloseq(bakteria, rngseed = 1234, replace = TRUE, trimOTUs = TRUE)
+rare.bak
+@
+
+\section{Most abundant taxa}
+
+<<most_abundant.habitat,echo=FALSE,warning=FALSE,out.height='6cm',out.width='6cm',fig.show='hold', fig.path= 'figure/most_abundant/'>>=
+plot.mostAbundant.habitat(rare.bak, level = "phylum", threshold = 0.01)
+plot.mostAbundant.habitat(rare.bak, level = "class", threshold = 0.01)
+plot.mostAbundant.habitat(rare.bak, level = "order", threshold = 0.01)
+plot.mostAbundant.habitat(rare.bak, level = "family", threshold = 0.01)
+plot.mostAbundant.habitat(rare.bak, level = "genus", threshold = 0.01)
+@
+<<most_abundant.sample,echo=FALSE,warning=FALSE,out.height='6cm',out.width='6cm',fig.show='hold', fig.path= 'figure/most_abundant/'>>=
+plot.mostAbundant.sample(rare.bak, level = "phylum", threshold = 0.01)
+plot.mostAbundant.sample(rare.bak, level = "class", threshold = 0.01)
+plot.mostAbundant.sample(rare.bak, level = "order", threshold = 0.01)
+plot.mostAbundant.sample(rare.bak, level = "family", threshold = 0.01)
+plot.mostAbundant.sample(rare.bak, level = "genus", threshold = 0.01)
+@
+
+\section{Biodiversity}
+
+<<richness.plot,echo=FALSE,warning=FALSE, fig.path= 'figure/richness/'>>=
+plot.overview.richness(rare.bak, file = "graphs/richness/richness.samples.pdf")
+@
+<<richness.table,echo=FALSE,warning=FALSE>>=
+get.richness(rare.bak) 
+@
+
+\section{Core Microbiome}
+
+<<core.venn>>=
+all.core <- get.coreMicrobiome(tax_glom(rare.bak, "genus"))
+free.core <- get.coreMicrobiome(tax_glom(get.free(rare.bak), "genus"))
+aqua.core <- get.coreMicrobiome(tax_glom(get.aqua(rare.bak), "genus"))
+@
+%# make a Venn Diagram free living core microbiome vs. mariculture core microbiome
+%grid.draw(plot.coreMicrobiome(tax_glom(rare.bak, "genus"), file = NULL)
+%@
+
+<<rare.core, echo=FALSE,warning=FALSE>>=
+plot.rarifyCoreOtus(rare.bak, n = 50, steps = 20, 
+title = "Development of Core OTUs \n(Rarefaction Curve)")
+@
+
+<<core.bar, echo=FALSE,warning=FALSE>>=
+plot_bar(all.core, file = NULL, 
+         level = "phylum", title = "Core Microbiome at\n phylum level")
+@
+
+\section{Ordination of Samples}
+
+<<ordination,echo=FALSE,warning=FALSE>>=
+plot.ordination.samples(rare.bak,  file = NULL,method = "NMDS", distance = "bray",
+                        hits = 5, num_samples = 0.5, num_best = 5,level = "phylum", 
+                        title = "Ordination of Samples\n(phylum level)")
+@
+
+\section{Discussion}
+
+\end{document}
