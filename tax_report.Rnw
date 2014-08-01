@@ -1,10 +1,10 @@
-\documentclass{article}
+\documentclass{scrartcl}
 \usepackage{geometry}
 
 \geometry{a4paper, top = 25mm, left = 20mm, right = 20mm, bottom = 25mm,
 headsep=10mm, footskip = 10mm}
 \title{Taxonomical Analysis}
-%\subtitle{of Epinephelus fuscoguttatus}
+\subtitle{of Epinephelus fuscoguttatus}
 \author{Philipp Sehnert}
 
 \begin{document}
@@ -34,7 +34,7 @@ headsep=10mm, footskip = 10mm}
 \noindent First we have to convert the \textit{taxonomyReportDB} object created by \textbf{metaR} to a file in biom format by the following two functions.
 <<createObject, cache = TRUE>>=
 # generate a biom file
-path <- generate.biomFile("bacterial.new", 
+#path <- generate.biomFile("bacterial.new", 
                           data = get.DBConnection.new(get.metadata.list()))
 # init the phyloseq object
 phylo.new <- generate.phyloseq("bacterial.new")

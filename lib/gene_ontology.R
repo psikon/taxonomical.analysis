@@ -1,5 +1,5 @@
-library(goseq)
-library(org.Hs.eg.db)
+#library(goseq)
+#library(org.Hs.eg.db)
 
 # getConnections()
 # rm(sample60.old,sample62.old,sample64.old,sample64.new,sample68.old,
