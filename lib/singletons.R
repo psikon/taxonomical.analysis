@@ -1,17 +1,40 @@
-# reduce the phyloseq object to OTUs, that have hits only in 'num_samples'. 
-# the other OTUs will be removed and it is possible to also remove samples, 
-# that do not match this criteria. the result will be a new phyloseq object 
-get.singleton.phyloseq <- function(phyloseq, num_samples = 1, rm_samples = TRUE, filter = 2) {
+#' get.singleton.phyloseq
+#'
+#' get the core microbiome from a phyloseq object 
+#' 
+#'@description reduce the phyloseq object to OTUs, that 
+#'             have hits only in 'num_samples'. the other 
+#'             OTUs will be removed and it is possible to 
+#'             also remove samples, that do not match this 
+#'             criteria
+#' 
+#'@param phyloseq       phyloseq object
+#'@param num_samples    max number of samples where a hit can occur
+#'@param rm_samples     remove samples with no singletons from phyloseq object
+#'@param filter         filter the abundance of singletons to prevent fdr
+#'
+#'@return phyloseq object
+#'@export
+#'
+# 
+get.singleton.phyloseq <- function(phyloseq, 
+                                   num_samples = 1, 
+                                   rm_samples = TRUE, 
+                                   filter = 2) {
+    
     # get all rows not belonging to the core microbiom
     non_zero <- rownames(otu_table(get.coreMicrobiome(phyloseq)))
+    
     # reduce otu_table
     otu_tbl <- otu_table(phyloseq)[-which(rownames(otu_table(phyloseq)) %in% non_zero)]
     # reduce tax_table
     tax_tbl <- tax_table(phyloseq)[-which(rownames(tax_table(phyloseq)) %in% non_zero)]
     # get sample_data
     sample_tbl <- sample_data(phyloseq)
+    
     # define max number of zeros
     max <- nrow(sample_data(phyloseq)) - num_samples
+   
     # find the singletons
     data <- apply(otu_tbl, 1, function(row) {
         if(table(row)["0"] >= max) {
@@ -22,9 +45,11 @@ get.singleton.phyloseq <- function(phyloseq, num_samples = 1, rm_samples = TRUE,
     data <- do.call(rbind, data[!sapply(data, is.null)])
     # get the names of the candidates
     names <- rownames(data)
+    
     # reduce tax_table to candidates
     tax_tbl <- tax_tbl[rownames(tax_tbl) %in%  names]
-    # reduce the phyloseq object containing only samples with present singletons
+    # reduce the phyloseq object containing only samples 
+    # with present singletons
     if(rm_samples) {
         # get a list of samples without a hit
         samples <- which(unlist(lapply(colnames(data), 
@@ -39,20 +64,41 @@ get.singleton.phyloseq <- function(phyloseq, num_samples = 1, rm_samples = TRUE,
     result <- phyloseq(otu_table(data, taxa_are_rows = T),
                        sample_tbl,
                        tax_tbl)
+    # filter the phyloseq object for abundance greater then filter
     result <- prune_taxa(taxa_sums(result) > filter, result)
     return(result)
 }
-# create a list of OTUs, that appear only in a number of samples. The list have the attributes:
-# tax.id          - taxonomical identifier of the NCBI taxonomy database 
-# scientific.name - scientific name of the NCBI taxonomy database
-# tax.rank        - taxonomical level of the NCBI taxonomy
-# samples         - sample id of the sample where the singleton appear
-# counts          - number of occurence in this specific sample
-get.singleton.list <- function(phyloseq, file = NULL, col.names = F, row.names = F) {
+#' get.singleton.list
+#'
+#' create a list of singletons with defined fields 
+#' 
+#'@description create a list of OTUs, that appear only in a 
+#'             number of samples. The list have the attributes:
+#'                  tax.id          - taxonomical identifier 
+#'                  scientific.name - scientific name 
+#'                  tax.rank        - taxonomical level
+#'                  samples         - sample id of the sample where the singleton appear
+#'                  counts          - number of occurence in this specific sample
+#' 
+#'@param phyloseq   phyloseq object
+#'@param file       output file 
+#'@param col.names  write col.names
+#'@param row.names  write row.names
+#'
+#'@return data.frame
+#'@export
+#'
+get.singleton.list <- function(phyloseq, 
+                               file = NULL, 
+                               col.names = F, 
+                               row.names = F) {
+    
     # build a data frame with desired inormations
-    data <- as.data.frame(t(sapply(seq_along(1:nrow(tax_table(phyloseq))), function(x) {
+    data <- as.data.frame(t(sapply(seq_along(1:nrow(tax_table(phyloseq))), 
+                                   function(x) {
         c("tax id" = rownames(otu_table(phyloseq)[x]),
-          "scientific.name" = sub("_"," ",last.taxa(tax_table(phyloseq)[x])),
+          "scientific.name" = sub("_"," ", 
+                                  last.taxa(tax_table(phyloseq)[x])),
           "tax.rank" = last.rank(tax_table(phyloseq)[x]),
           "samples" = paste(colnames(otu_table(phyloseq)[x][, otu_table(phyloseq)[x] > 0]), 
                             sep = ",", collapse = ","),
@@ -61,13 +107,20 @@ get.singleton.list <- function(phyloseq, file = NULL, col.names = F, row.names =
           "counts"= paste(as.vector(otu_table(phyloseq)[x][, otu_table(phyloseq)[x] > 0]), 
                           sep = ",", collapse = ","))
     })))
+    
     # adjust column names
     colnames(data) <- c("tax.id", "scientific.name", "tax.rank", 
                         "samples", "environment", "counts")
-    data <- data[order(data$environment),]
-    # save the data frame in a tab separeted file
+    data <- data[order(data$environment), ]
+    
+    # save the data frame in a tab seperated file
     if(!is.null(file)) {
-        write.table(data,file, sep="\t",quote = F, row.names=row.names,col.names=col.names)
+        write.table(data,
+                    file, 
+                    sep="\t",
+                    quote = F, 
+                    row.names = row.names,
+                    col.names = col.names)
     }
     return(data) 
 }

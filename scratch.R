@@ -46,7 +46,7 @@ plot.groupedAbundance(phylo.new,
                       length_group1 = 5, length_group2 = 7,
                       title = "Abundance in defined groups per sample\n(percent)")
 
-plot.DBcount(data = get.DBConnection.new(get.metadata.list()) , 
+plot.DBCount(data = get.DBConnection.new(get.metadata.list()) , 
              names = c("sample 60", "sample62","sample 64", "sample 66","sample 68", "sample 70", 
                        "sample 72", "sample 74", "sample 76", "sample 78", 
                        "sample 80", "sample 82"), 
@@ -128,7 +128,7 @@ plot.mostAbundant.sample(rare.bak, level = "genus", threshold = 0.01,
 load.project()
 
 # plot richness
-plot.overview.richness(rare.bak, file = "graphs/richness/richness.samples.pdf")
+plot.richness(rare.bak, file = "graphs/richness/richness.samples.pdf")
 
 # get a list of richniess indices per sample
 richness <- get.richness(rare.bak) 
@@ -155,16 +155,18 @@ plot.rarifyCoreOtus(rare.bak, n = 50, steps = 20,
                     file = "graphs/core/core.rarefactionCurve.pdf",
                     title = "Development of Core OTUs \n(Rarefaction Curve)")
 
- # plot the content of the different core microbiome at phylum level
-plot_bar(all.core, file = "graphs/core/all.core.phylum.pdf", 
+# plot the content of the different core microbiome at phylum level
+plot_bar(rm.underscore(all.core), file = "graphs/core/all.core.phylum.pdf", 
          level = "phylum", title = "Core Microbiome at\n phylum level")
-plot.taxonomy.graph(all.core,file = "graphs/core/all.core.content.pdf", level= "genus")
+plot.taxonomy.graph(all.core,
+                    file = "graphs/core/all.core.content.pdf", 
+                    level = "genus")
 
-plot_bar(free.core, file = "graphs/core/free.core.phylum.pdf", 
+plot_bar(rm.underscore(free.core), file = "graphs/core/free.core.phylum.pdf", 
          level = "phylum", title = "Core Microbiome of free living samples \nat phylum level")
 plot.taxonomy.graph(free.core,file = "graphs/core/free.core.content.pdf",level= "genus")
 
-plot_bar(aqua.core, file = "graphs/core/aqua.core.phylum.pdf", 
+plot_bar(rm.underscore(aqua.core), file = "graphs/core/aqua.core.phylum.pdf", 
          level = "phylum", title = "Core Microbiome of mariculture samples \nat phylum level")
 plot.taxonomy.graph(aqua.core,file = "graphs/core/aqua.core.content.pdf",level= "genus")
 
@@ -227,7 +229,7 @@ plot.differential.OTUs(edgeR.differential.OTUs(rare.bak, alpha = 0.2),
 plot_heatmap(rm.underscore(tax_glom(rare.bak,"class")),
              sample.label = "SampleName",
              sample.order = "HoldingCondition",
-             taxa.label = "class",)
+             taxa.label = "class")
 
 ##################################################################
 ######### Function Analysis with blast2GO ########################

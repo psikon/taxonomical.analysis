@@ -1,12 +1,30 @@
-# remove a taxa with a specific tax id from phyloseq object
-rm.taxa <- function(phyloseq, taxa) {
+#' rm.taxa
+#'
+#' remove a taxa with a specific tax id from phyloseq object 
+#' 
+#'@param phyloseq   phyloseq object
+#'@param taxa       taxa to remove
+#'
+#'@return phyloseq object
+#'@export
+#'
+rm.taxa <- function(phyloseq, 
+                    taxa) {
     phyloseq <- prune_species(!grepl(paste0("\\<", taxa, "\\>"),
-                                     labels(otu_table(phyloseq))[[1]]), phyloseq)
+                                     labels(otu_table(phyloseq))[[1]]), 
+                              phyloseq)
     return(phyloseq)
 }
 
-# remove the undercore syntax from tax_table originating from the metaR or RDP process 
-# for beatiful plotting
+#' rm.underscore
+#'
+#' remove underscore syntax from tax_table taxonomies
+#' 
+#'@param phyloseq   phyloseq object
+#'
+#'@return phyloseq object
+#'@export
+#'
 rm.underscore <- function(phyloseq) {
     # extract the tax_table
     data <- tax_table(phyloseq)
@@ -21,6 +39,18 @@ rm.underscore <- function(phyloseq) {
     return(phyloseq)
 }
 
+#' get.phyloLevels
+#'
+#' count levels of taxomomies
+#' 
+#'@param phyloseq   phyloseq object
+#'@param sample     sample for count
+#'@param ranks      taxonomical ranks
+#'@param absolute   absolute or percantage values
+#'
+#'@return data.frame
+#'@keywords internal
+#'
 # get the number of levels of a specific OTU
 get.phyloLevels <- function(phyloseq, sample, ranks, absolute) {
     # get all otus with hits in otu_table from phyloseq object
@@ -43,7 +73,16 @@ get.phyloLevels <- function(phyloseq, sample, ranks, absolute) {
     return(res)
 }
 
-# count the taxonomical levels of of a OTU
+#' get.levelCount
+#'
+#' count the taxonomical levels of of a OTU
+#' 
+#'@param tax_table   phyloseq tax_table
+#'@param level       specific taxonomical level
+#'
+#'@return level
+#'@keywords internal
+#'
 get.levelCount <- function(tax_table, level) {
     if(is.null(tax_table)) {
         # no otus found
@@ -59,7 +98,15 @@ get.levelCount <- function(tax_table, level) {
     return(x)
 }
 
-# convert a absolute number to percent value
+#' as.percent
+#'
+#' convert a value to percantage
+#' 
+#'@param x value
+#'
+#'@return percentage
+#'@keywords internal
+#'
 as.percent <- function(x) {
     # w/p = g/100
     # first value in df is 100%
@@ -72,25 +119,58 @@ as.percent <- function(x) {
     return(y)
 }
 
-# get only the free living samples
+#' get.free
+#'
+#' get only sample with HoldingCondition free_living
+#' 
+#'@param phyloseq   phyloseq object
+#'
+#'@return phyloseq object
+#'@keywords internal
+#'
 get.free <- function(phyloseq) {
-    return(subset_samples(phyloseq, HoldingCondition == "free living"))
+    return(subset_samples(phyloseq, 
+                          HoldingCondition == "free living"))
 }
 
-# get only the mariculture samples
+#' get.aqua
+#'
+#' get only sample with HoldingCondition mariculture
+#' 
+#'@param phyloseq   phyloseq object
+#'
+#'@return phyloseq object
+#'@keywords internal
+#'
 get.aqua <- function(phyloseq) {
-    return(subset_samples(phyloseq, HoldingCondition == "mariculture"))
+    return(subset_samples(phyloseq, 
+                          HoldingCondition == "mariculture"))
 }
 
-# get the last rank of a linage from tax_table
+#' last.rank
+#'
+#' get the last rank of a linage from tax_table
+#' 
+#'@param x   tax_table
+#'
+#'@return last rank
+#'@keywords internal
+#'
 last.rank <- function(x) {
     x <- tail(colnames(x[, sapply(strsplit(x, "*__"), function(y){
         length(y) > 1
     })]), n = 1)
     return(x)
 }
-
-# get only the last taxa from a tax_table
+#' last.taxa
+#'
+#' get only the last taxa from tax_table
+#' 
+#'@param x  tax_table
+#'
+#'@return last taxa
+#'@keywords internal
+#'
 last.taxa <- function(x) {
     rank <- tail(colnames(x[, sapply(strsplit(x, "*__"), function(y){
         length(y)>1
@@ -99,81 +179,149 @@ last.taxa <- function(x) {
     return(x)
 }
 
-# user defined theme for richness plot
+#' get.richness theme
+#'
+#' return a predefined theme for richness plot
+#'
+#'@return ggplot2 theme
+#'@keywords internal
+#'
 get.richnessTheme <- function() {
-    ggtheme.alpha <- theme_bw() + theme(
-                                        legend.position = "top",
-                                        legend.text = element_text(size = 10),
-                                        legend.title = element_text(size = 12),
-                                        axis.text = element_text(size = 8),
-                                        axis.title = element_text(size = 12),
-                                        strip.text = element_text(size = 12),
-                                        plot.margin = unit(c(0.025,0.025,.025,0.025), "npc"),
-                                        axis.text.x = element_text(face = "italic", 
-                                                                   size=rel(1), 
-                                                                   angle = 30, 
-                                                                   hjust = 1, 
-                                                                   vjust = 1),
-                                        axis.title = element_text(size=rel(1), 
-                                                                  lineheight=1.5),
-                                        legend.key = element_rect(colour = "white")
-                                    )
+    ggtheme.alpha <- theme_bw() + 
+        theme(legend.position = "top",
+              legend.text = element_text(size = 10),
+              legend.title = element_text(size = 12),
+              axis.text = element_text(size = 8),
+              axis.title = element_text(size = 12),
+              strip.text = element_text(size = 12),
+              plot.margin = unit(c(0.025,0.025,.025,0.025), "npc"),
+              axis.text.x = element_text(face = "italic", 
+                                         size=rel(1), 
+                                         angle = 30, 
+                                         hjust = 1, 
+                                         vjust = 1),
+              axis.title = element_text(size=rel(1), 
+                                        lineheight=1.5),
+              legend.key = element_rect(colour = "white")
+              )
     return(ggtheme.alpha)
 }
 
-# count the number of Artifacts in phyloseq object. An artifact is defined by mapping 
-# only to the superkingdom level in the linage
+#' countArtifacts
+#'
+#' count the number of Artifacts in phyloseq object. 
+#' An artifact is defined by mapping only to the 
+#' superkingdom level in the linage
+#' 
+#'@param phyloseq   phyloseq object
+#'@param sample     specific sample
+#'
+#'@return number of Artifacts
+#'@keywords internal
+#'
 countArtifacts <- function(phyloseq, sample) {
     # extract all bacterial taxa
     with <- subset_taxa(phyloseq, superkingdom == 'k__Bacteria')
     # remove taxa with maximal mapping to superkingdom
     without <- rm.taxa(with, "2")
     # calculate number of atrifacts and return them
-    return(countReads(with, as.character(sample)) - countReads(without, as.character(sample)))
+    return(countReads(with,
+                      as.character(sample)) - countReads(without, 
+                                                         as.character(sample)))
 }
 
-# count the total number of taxonomical hits of a sample
+#' countReads
+#'
+#' count the total number of taxonomical hits in a sample
+#' 
+#'@param phyloseq   phyloseq object
+#'@param sample     specific sample
+#'
+#'@return number of taxonomical hits
+#'@keywords internal
+#'
 countReads <- function(phyloseq, sample) {
     value <- sum(count(get_taxa(phyloseq, as.character(sample)))$x * count(get_taxa(phyloseq, as.character(sample)))$freq)
     return(value)
 }
-# get the number of OTUs of a sample
+#' getOTUs
+#'
+#' count the number of OTUs in a sample
+#' 
+#'@param phyloseq   phyloseq object
+#'@param sample     specific sample
+#'
+#'@return number OTUs
+#'@keywords internal
+#'
 getOTUs <- function(phyloseq, sample) {
     return(length(which(otu_table(phyloseq)[, as.character(sample)] > 0) == TRUE))
 }
 
-# from: Martin Turjak
-# at: http://stackoverflow.com/questions/15343338/
-# recursion function for newick string creation
-traverse <- function(a,i,innerl){
+#' traverse
+#'
+#' recursion function for newick string creation
+#' 
+#'@description from: Martin Turjak
+#'             at: http://stackoverflow.com/questions/15343338/        
+#'
+#'@param a   
+#'@param i     
+#'@param innerl
+#'
+#'@return newick string
+#'@keywords internal
+#'
+traverse <- function(a, i, innerl){
     if(i < (ncol(df))){
-        alevelinner <- as.character(unique(df[which(as.character(df[,i])==a),i+1]))
+        alevelinner <- as.character(unique(df[which(as.character(df[ , i]) == a), i+1]))
         desc <- NULL
-        if(length(alevelinner) == 1) (newickout <- traverse(alevelinner,i+1,innerl))
+        if(length(alevelinner) == 1) (newickout <- traverse(alevelinner, i+1, innerl))
         else {
-            for(b in alevelinner) desc <- c(desc,traverse(b,i+1,innerl))
-            il <- NULL; if(innerl==TRUE) il <- a
-            (newickout <- paste("(",paste(desc,collapse=","),")",il,sep=""))
+            for(b in alevelinner) desc <- c(desc, traverse(b, i+1, innerl))
+            il <- NULL; if(innerl == TRUE) il <- a
+            (newickout <- paste("(", 
+                                paste(desc, collapse = ","), 
+                                ")", il, sep = ""))
         }
     }
     else { (newickout <- a) }
 }
 
-# from: Martin Turjak
-# at: http://stackoverflow.com/questions/15343338/
-# data.frame to newick function
+#' df2newick
+#'
+#' data.frame to newick function
+#' 
+#'@description from: Martin Turjak
+#'             at: http://stackoverflow.com/questions/15343338/        
+#'
+#'@param df   
+#'@param innerlabel     
+#'
+#'@return newick string
+#'@keywords internal
+#'
 df2newick <- function(df, innerlabel = FALSE) {
     # determine root
-    alevel <- as.character(unique(df[,1]))
+    alevel <- as.character(unique(df[ , 1]))
     newick <- NULL
     # traverse throug data.frame and create newick string
     for(x in alevel) newick <- c(newick, traverse(x, 1, innerlabel))
     # add outer strings
-    (newick <- paste("(",paste(newick,collapse=","),");",sep=""))
+    (newick <- paste("(", 
+                     paste(newick, collapse = ","), ");", 
+                     sep = ""))
     return(newick)
 }
-
-# overwrite to fix bug in plot_bar
+#' psmelt
+#'
+#' overwrite to fix bug in plot_bar       
+#'
+#'@param physeq phyloseq object       
+#'
+#'@return mdf
+#'@keywords internal
+#'
 psmelt <- function(physeq) 
 {
     if (!inherits(physeq, "phyloseq")) {
@@ -238,19 +386,49 @@ psmelt <- function(physeq)
     return(mdf)
 }
 
-# overwrite to fix bug in plot_bar
-plot_bar <- function (physeq, x = "Sample", y = "Abundance", fill = NULL, 
-                      title = NULL, facet_grid = NULL) {
+#' plot_bar
+#'
+#' overwrite to fix bug in plot_bar       
+#'
+#'@param physeq phyloseq object 
+#'@param x
+#'@param y
+#'@param fill
+#'@param title
+#'@param facet_grid      
+#'
+#'@return ggplot2 object
+#'@keywords internal
+#'
+plot_bar <- function (physeq, 
+                      file = NULL,
+                      x = "Sample", 
+                      y = "Abundance", 
+                      level = NULL, 
+                      title = NULL, 
+                      facet_grid = NULL) {
     mdf = psmelt(physeq)
-    p = ggplot(mdf, aes_string(x = x, y = y, fill = fill))
-    p = p + geom_bar(stat = "identity", position = "stack", color = "black")
-    p = p + theme(axis.text.x = element_text(angle = -90, hjust = 0))
+    # change geom str to remove boxes
+    geom_str <- paste0("geom_bar(aes(color = ",level,", 
+                       fill = ",level,"), stat = 'identity', 
+                       position = 'stack')") 
+    
+    p = ggplot(mdf, aes_string(x = x, y = y, fill = level))
+    
+    p = p +  eval(parse(text = geom_str)) + 
+        scale_y_continuous(labels = comma,
+                           breaks = pretty_breaks(n = 10)) 
+    p = p + theme(axis.text.x = element_text(angle = -90, 
+                                             hjust = 0))
     if (!is.null(facet_grid)) {
         p <- p + facet_grid(facet_grid)
     }
     if (!is.null(title)) {
         p <- p + ggtitle(title)
     }
+        
+    # save plot to file
+    if(!is.null(file)) ggsave(file)
     return(p)
 }
 

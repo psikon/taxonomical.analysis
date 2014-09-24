@@ -1,28 +1,30 @@
-1029823	Acinetobacter	genus	64	122	413	38
-1096546	Methylobacterium	genus	12613	12	2	334
-1110389	Verminephrobacter	genus	55	244	342	37
-1144305	Novosphingobium	genus	69	3	500	87
-1144306	Rhizobium	genus	308	11	2209	264
-1144307	Sphingobium	genus	117	1	605	95
-1144317	Acidovorax	genus	783	37	6815	887
-1144342	Herbaspirillum	genus	192	46	1251	200
-1224	Proteobacteria	phylum	22121	69	6150	1240
-1236	Gammaproteobacteria	class	445	130	994	529
-1292021	Kocuria	genus	43	19	1	322
-1454	Bacillus	genus	1167	3450	3314	33466
-173	Leptospira	genus	660	23	645	733
-1773	Mycobacterium	genus	8	18	197	4
-229204	Flavobacterium	genus	123	14	1	133
-231049	Lactobacillus	genus	5	4	19	7
-28211	Alphaproteobacteria	class	7	3	36	5
-28901	Salmonella	genus	841	58	3144	1343
-317	Pseudomonas	genus	3189	108	11895	3350
-33917	Microbacterium	genus	23	43	81	32
-356	Rhizobiales	order	7	6	1	2
-53413	Xanthomonas	genus	547	23	2119	484
-645	Aeromonas	genus	14	52	94	9
-662	Vibrio	genus	142	3079	142	6
-795665	Hydrogenophaga	genus	139	1	724	173
-80840	Burkholderiales	order	32	1	168	39
-85642	Candidatus Phytoplasma	genus	19	5	398	29
-85698	Achromobacter	genus	128	8	181	147
+1029823	Acinetobacter	genus	61	121	108	414	58
+1096546	Methylobacterium	genus	12614	578	11	1	315
+1110389	Verminephrobacter	genus	60	92	194	371	21
+1144305	Novosphingobium	genus	70	185	1	464	91
+1144306	Rhizobium	genus	306	771	8	2248	280
+1144307	Sphingobium	genus	117	225	1	619	104
+1144317	Acidovorax	genus	783	1998	23	6812	890
+1144342	Herbaspirillum	genus	191	407	62	1268	153
+1224	Proteobacteria	phylum	22122	2780	70	6207	1294
+1236	Gammaproteobacteria	class	445	935	135	1008	576
+1292021	Kocuria	genus	43	398	23	4	320
+1454	Bacillus	genus	1165	7610	3357	3306	33378
+173	Leptospira	genus	655	824	34	680	718
+1773	Mycobacterium	genus	8	14	23	200	1
+229204	Flavobacterium	genus	123	68	11	2	139
+231049	Lactobacillus	genus	5	10	6	20	6
+28211	Alphaproteobacteria	class	7	14	2	43	7
+28901	Salmonella	genus	841	2835	67	3064	1414
+317	Pseudomonas	genus	3189	19124	102	11738	3314
+33917	Microbacterium	genus	23	42	57	93	26
+356	Rhizobiales	order	12	3	3	1	3
+38293	Photobacterium	genus	66	2023	35550	1459	2
+53413	Xanthomonas	genus	547	1255	31	2150	495
+562	Escherichia	genus	2	3	3	3	1
+645	Aeromonas	genus	14	27	47	82	16
+662	Vibrio	genus	138	822	2996	158	8
+795665	Hydrogenophaga	genus	139	353	6	741	171
+80840	Burkholderiales	order	32	75	1	171	44
+85642	Candidatus Phytoplasma	genus	19	37	2	404	31
+85698	Achromobacter	genus	128	256	6	157	126
