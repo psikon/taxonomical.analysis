@@ -8,20 +8,22 @@
 #'@keyword internal, deprecated
 #'@return list of db con
 #'
-get.DBConnection.old <- function(metadataList) {
-    sample60.old <- taxonomyReportDBConnect("data/taxonomyDB/sample60_bac.db", metadataList[["60"]])
-    sample62.old <- taxonomyReportDBConnect("data/taxonomyDB/sample62_bac.db", metadataList[["62"]]) 
-    sample66.old <- taxonomyReportDBConnect("data/taxonomyDB/sample66_bac.db", metadataList[["66"]])
-    sample68.old <- taxonomyReportDBConnect("data/taxonomyDB/sample68_bac.db", metadataList[["68"]]) 
-    sample70.old <- taxonomyReportDBConnect("data/taxonomyDB/sample70_bac.db", metadataList[["70"]]) 
-    sample76.old <- taxonomyReportDBConnect("data/taxonomyDB/sample76_bac.db", metadataList[["76"]]) 
-    sample78.old <- taxonomyReportDBConnect("data/taxonomyDB/sample78_bac.db", metadataList[["78"]]) 
-    sample80.old <- taxonomyReportDBConnect("data/taxonomyDB/sample80_bac.db", metadataList[["80"]]) 
-    sample82.old <- taxonomyReportDBConnect("data/taxonomyDB/sample82_bac.db", metadataList[["82"]]) 
+get.eukaryotaDB <- function(metadataList) {
+    sample60.euk <- taxonomyReportDBConnect("data/eukaryotaDB/sample60.complete.db", metadataList[["60"]])
+    sample62.euk <- taxonomyReportDBConnect("data/", metadataList[["62"]]) 
+    sample66.euk <- taxonomyReportDBConnect("data/", metadataList[["66"]])
+    sample68.euk <- taxonomyReportDBConnect("data/", metadataList[["68"]]) 
+    sample70.euk <- taxonomyReportDBConnect("data/", metadataList[["70"]]) 
+    sample72.euk <- taxonomyReportDBConnect("data/", metadataList[["72"]]) 
+    sample75.euk <- taxonomyReportDBConnect("data/", metadataList[["74"]]) 
+    sample76.euk <- taxonomyReportDBConnect("data/", metadataList[["76"]]) 
+    sample78.euk <- taxonomyReportDBConnect("", metadataList[["78"]]) 
+    sample80.euk <- taxonomyReportDBConnect("", metadataList[["80"]]) 
+    sample82.euk <- taxonomyReportDBConnect("", metadataList[["82"]]) 
     return(list(sample60.old, sample62.old, sample66.old, sample68.old,sample70.old,
                 sample76.old, sample78.old, sample80.old, sample82.old))
 }
-#' get.DBConnection.new
+#' get.bacterialDB
 #'
 #' wrapper for the creation of the taxonomyReportDB connections 
 #' of the new experiment run with meta-pipeline
@@ -31,22 +33,22 @@ get.DBConnection.old <- function(metadataList) {
 #'@keyword internal
 #'@return list of db con
 #'
-get.DBConnection.new <- function(metadataList) {
-    sample60.new <- taxonomyReportDBConnect("data/taxonomyDB/sample60.new.bac.db", metadataList[["60"]])
-    sample62.new <- taxonomyReportDBConnect("data/taxonomyDB/sample62.new.bac.db", metadataList[["62"]])
-    sample64.new <- taxonomyReportDBConnect("data/taxonomyDB/sample64.new.bac.db", metadataList[["64"]])
-    sample66.new <- taxonomyReportDBConnect("data/taxonomyDB/sample66.new.bac.db", metadataList[["66"]]) 
-    sample68.new <- taxonomyReportDBConnect("data/taxonomyDB/sample68.new.bac.db", metadataList[["68"]]) 
-    sample70.new <- taxonomyReportDBConnect("data/taxonomyDB/sample70.new.bac.db", metadataList[["70"]]) 
-    sample72.new <- taxonomyReportDBConnect("data/taxonomyDB/sample72.new.bac.db", metadataList[["72"]]) 
-    sample74.new <- taxonomyReportDBConnect("data/taxonomyDB/sample74.new.bac.db", metadataList[["74"]]) 
-    sample76.new <- taxonomyReportDBConnect("data/taxonomyDB/sample76.new.bac.db", metadataList[["76"]]) 
-    sample78.new <- taxonomyReportDBConnect("data/taxonomyDB/sample78.new.bac.db", metadataList[["78"]]) 
-    sample80.new <- taxonomyReportDBConnect("data/taxonomyDB/sample80.new.bac.db", metadataList[["80"]]) 
-    sample82.new <- taxonomyReportDBConnect("data/taxonomyDB/sample82.new.bac.db", metadataList[["82"]])
-    return(list(sample60.new, sample62.new, sample64.new, sample66.new, sample68.new, 
-                sample70.new, sample72.new, sample74.new, sample76.new, sample78.new, 
-                sample80.new, sample82.new))
+get.bacterialDB <- function(metadataList) {
+    sample60.bac <- taxonomyReportDBConnect("data/bacterialDB/sample60.new.bac.db", metadataList[["60"]])
+    sample62.bac <- taxonomyReportDBConnect("data/bacterialDB/sample62.new.bac.db", metadataList[["62"]])
+    sample64.bac <- taxonomyReportDBConnect("data/bacterialDB/sample64.new.bac.db", metadataList[["64"]])
+    sample66.bac <- taxonomyReportDBConnect("data/bacterialDB/sample66.new.bac.db", metadataList[["66"]]) 
+    sample68.bac <- taxonomyReportDBConnect("data/bacterialDB/sample68.new.bac.db", metadataList[["68"]]) 
+    sample70.bac <- taxonomyReportDBConnect("data/bacterialDB/sample70.new.bac.db", metadataList[["70"]]) 
+    sample72.bac <- taxonomyReportDBConnect("data/bacterialDB/sample72.new.bac.db", metadataList[["72"]]) 
+    sample74.bac <- taxonomyReportDBConnect("data/bacterialDB/sample74.new.bac.db", metadataList[["74"]]) 
+    sample76.bac <- taxonomyReportDBConnect("data/bacterialDB/sample76.new.bac.db", metadataList[["76"]]) 
+    sample78.bac <- taxonomyReportDBConnect("data/bacterialDB/sample78.new.bac.db", metadataList[["78"]]) 
+    sample80.bac <- taxonomyReportDBConnect("data/bacterialDB/sample80.new.bac.db", metadataList[["80"]]) 
+    sample82.bac <- taxonomyReportDBConnect("data/bacterialDB/sample82.new.bac.db", metadataList[["82"]])
+    return(list(sample60.bac, sample62.bac, sample64.bac, sample66.bac, sample68.bac, 
+                sample70.bac, sample72.bac, sample74.bac, sample76.bac, sample78.bac, 
+                sample80.bac, sample82.bac))
 }
 #' create.QueryIDFile
 #'

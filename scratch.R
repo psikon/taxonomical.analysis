@@ -20,58 +20,6 @@ path <- generate.biomFile("bacterial.new", data = get.DBConnection.new(get.metad
 phylo.new <- generate.phyloseq("bacterial.new")
 
 #############################################################
-######## Evaluation of different pipeline steps #############
-#############################################################
-load.project()
-
-plot.taxaResolution(phylo.new,
-                    file = "graphs/evaluation/taxa_res.abs.pdf",
-                    absolute = TRUE, sep = TRUE, 
-                    length_group1 = 5, length_group2 = 7,
-                    title = "Taxonomical Resolution per samples \n(abs)")
-plot.taxaResolution(phylo.new,
-                    file = "graphs/evaluation/taxa_res.perc.pdf",
-                    absolute = FALSE, sep = TRUE, 
-                    length_group1 = 5, length_group2 = 7,
-                    title = "Taxonomical Resolution per samples \n(percent)")
-
-plot.groupedAbundance(phylo.new, 
-                      file = "graphs/evaluation/abundance.abs.pdf",
-                      absolute = TRUE, sep = TRUE,
-                      length_group1 = 5, length_group2 = 7,
-                      title = "Abundance in defined groups per sample\n(absolute)")
-plot.groupedAbundance(phylo.new, 
-                      file = "graphs/evaluation/abundance.perc.pdf",
-                      absolute = FALSE, sep = TRUE,
-                      length_group1 = 5, length_group2 = 7,
-                      title = "Abundance in defined groups per sample\n(percent)")
-
-plot.DBCount(data = get.DBConnection.new(get.metadata.list()) , 
-             names = c("sample 60", "sample62","sample 64", "sample 66","sample 68", "sample 70", 
-                       "sample 72", "sample 74", "sample 76", "sample 78", 
-                       "sample 80", "sample 82"), 
-             file = "graphs/evaluation/database_counts.pdf",
-             sep = TRUE, length_group1 = 5, length_group2 = 7,
-             title = "Hits in taxonomyReportDB per sample")
-
-############################################################
-################## General separations #####################
-############################################################
-load.project()
-
-# subset the phyloseq object based on taxonomy expressions
-fungi <- subset_taxa(phylo.new, superkingdom == "k__Eukaryota")
-# only artefacts
-virus <- subset_taxa(phylo.new, superkingdom == "k__Viruses")
-
-bakteria <- subset_taxa(phylo.new, superkingdom == 'k__Bacteria')
-# remove contamination
-bakteria <- rm.taxa(bakteria, "2")
-# filter less abundant taxa
-#bakteria <- prune_taxa(taxa_sums(bakteria) > 3, bakteria)
-bakteria
-
-#############################################################
 ################### Rarefaction Curves ######################
 #############################################################
 load.project()
@@ -230,16 +178,6 @@ plot_heatmap(rm.underscore(tax_glom(rare.bak,"class")),
              sample.label = "SampleName",
              sample.order = "HoldingCondition",
              taxa.label = "class")
-
-##################################################################
-######### Function Analysis with blast2GO ########################
-##################################################################
-load.project()
-
-create.FastaFromTaxonomyReportDB(path = "data/functional", position = c(1,4,5),
-                                 fasta.files = c("data/functional/sample60.classify.fasta",
-                                                 "data/functional/sample68.classify.fasta",
-                                                 "data/functional/sample70.classify.fasta"))
 
 
 
