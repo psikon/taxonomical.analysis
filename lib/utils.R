@@ -179,34 +179,6 @@ last.taxa <- function(x) {
     return(x)
 }
 
-#' get.richness theme
-#'
-#' return a predefined theme for richness plot
-#'
-#'@return ggplot2 theme
-#'@keywords internal
-#'
-get.richnessTheme <- function() {
-    ggtheme.alpha <- theme_bw() + 
-        theme(legend.position = "top",
-              legend.text = element_text(size = 10),
-              legend.title = element_text(size = 12),
-              axis.text = element_text(size = 8),
-              axis.title = element_text(size = 12),
-              strip.text = element_text(size = 12),
-              plot.margin = unit(c(0.025,0.025,.025,0.025), "npc"),
-              axis.text.x = element_text(face = "italic", 
-                                         size=rel(1), 
-                                         angle = 30, 
-                                         hjust = 1, 
-                                         vjust = 1),
-              axis.title = element_text(size=rel(1), 
-                                        lineheight=1.5),
-              legend.key = element_rect(colour = "white")
-              )
-    return(ggtheme.alpha)
-}
-
 #' countArtifacts
 #'
 #' count the number of Artifacts in phyloseq object. 
@@ -258,130 +230,210 @@ getOTUs <- function(phyloseq, sample) {
     return(length(which(otu_table(phyloseq)[, as.character(sample)] > 0) == TRUE))
 }
 
-#' traverse
+#' create.QueryIDFile
 #'
-#' recursion function for newick string creation
+#' extract from taxonomyReportDB object the query_ids with 
+#' successfull annotation and create file of it
+#'
+#'@param path       path for output file
+#'@param position   position of samples in db structure
+#'                      
+#'@keyword internal
+#'@return list of files
+#'
+create.QueryIDFile <- function(path = "data/functional", 
+                               position = NULL) {
+    
+    # get all taxonomyReportDB's
+    db <- get.DBConnection.new(get.metadata.list())
+    
+    # reduce to desired dbs
+    if (!is.null(position)) {
+        db <- db[position]
+    }
+    
+    files <- lapply(db, function(x) {
+        # create filename for index file
+        file <- paste0(path, 
+                       "/", 
+                       as.character(x$.metadata["SampleName"]), ".txt")
+        # extract the query_ids
+        query_ids <- db_query(conn(x),
+                              "Select query_def from query", 1)
+        # write query_ids to file line by line
+        write.table(query_ids, 
+                    file = file, 
+                    quote = FALSE, 
+                    row.names = F, 
+                    col.names = F)
+        # return filepath
+        file
+    })
+    return(files)
+}
+
+#' create.FastaFromTaxonomyReportDB
+#'
+#' extract from fasta input file the reads with annotation 
+#' result in database 
+#'
+#'@param path           path for output file
+#'@param fasta.files    list of input fasta files
+#'@param position       position of samples in db structure
+#'                      
+#'@keyword internal
+#'
+create.FastaFromTaxonomyReportDB <- function(path = "data/functional", 
+                                             fasta.files, 
+                                             position = NULL) {
+    # create the index files
+    index.files <- create.QueryIDFile(path = path, 
+                                      position = position)
+    for (i in seq_along(index.files)) {
+        # resolve filename
+        name <- strsplit(strsplit(index.files[[i]], 
+                                  split = "/")[[1]][3], '.', 1)[[1]][1]
+        message(paste0("create fasta file for: ", name))
+        # construct output path
+        output <- paste0(path, "/", name, ".fasta")
+        # generate commandline string
+        cmd <- paste0("python src/fastaExtractor.py --header ", 
+                      index.files[[i]], " --fasta ", 
+                      fasta.files[i], " --output ",
+                      output)
+        # run src/fastaExtractor.py
+        system(cmd, wait = T)
+    }
+}
+
+#' phyloseq_to_DESeq
+#'
+#' import a phyloseq object to DESeq 
 #' 
-#'@description from: Martin Turjak
-#'             at: http://stackoverflow.com/questions/15343338/        
+#'@description from phyloseq extension tutorial 
+#'              (http://joey711.github.io/phyloseq-extensions/DESeq.html)
+#' 
+#'@param physeq         phyloseq object
+#'@param designFactor   test variable in metadata
+#'@param fitType        see documentation
+#'@param locfunc        see documentation
 #'
-#'@param a   
-#'@param i     
-#'@param innerl
+#'@return DESeq object
+#'@export
 #'
-#'@return newick string
-#'@keywords internal
-#'
-traverse <- function(a, i, innerl){
-    if(i < (ncol(df))){
-        alevelinner <- as.character(unique(df[which(as.character(df[ , i]) == a), i+1]))
-        desc <- NULL
-        if(length(alevelinner) == 1) (newickout <- traverse(alevelinner, i+1, innerl))
-        else {
-            for(b in alevelinner) desc <- c(desc, traverse(b, i+1, innerl))
-            il <- NULL; if(innerl == TRUE) il <- a
-            (newickout <- paste("(", 
-                                paste(desc, collapse = ","), 
-                                ")", il, sep = ""))
+phyloseq_to_DESeq = function(physeq, 
+                             designFactor, 
+                             fitType = "local", 
+                             locfunc = median, 
+                             ...) {
+    
+    # Enforce Orientation
+    if (!taxa_are_rows(physeq)) {
+        physeq <- t(physeq)
+    }
+    
+    # Convert to matrix, round up to nearest integer
+    x = ceiling(as(otu_table(physeq), "matrix")) + 1L
+    
+    # Add taxonomy data, if present.
+    if (!is.null(tax_table(physeq, FALSE))) {
+        taxADF = as(data.frame(as(tax_table(physeq), 
+                                  "matrix")), 
+                    "AnnotatedDataFrame")
+    } else {
+        taxADF = NULL
+    }
+    
+    # Add sample data if present
+    if (!is.null(sample_data(physeq, FALSE))) {
+        samplesADF = as(data.frame(sample_data(physeq)), 
+                        "AnnotatedDataFrame")
+    } else {
+        samplesADF = NULL
+    }
+    
+    # Initalize the count data sets.
+    if (identical(length(designFactor), 1L)) {
+        if (designFactor %in% sample_variables(physeq)) {
+            designFactor <- get_variable(physeq, designFactor)
+        } else {
+            stop("You did not provide an appropriate `designFactor` argument. Please see documentation.")
         }
     }
-    else { (newickout <- a) }
+    
+    cds = newCountDataSet(x, 
+                          conditions = designFactor, 
+                          phenoData = samplesADF, 
+                          featureData = taxADF)
+    # First, estimate size factors, then estimate dispersion.
+    cds = estimateSizeFactors(cds, 
+                              locfunc = locfunc)
+    # Now dispersions/variance estimation, 
+    # passing along additional options
+    cds = estimateDispersions(cds, 
+                              fitType = fitType, ...)
+    
+    return(cds)
 }
-
-#' df2newick
+#' phyloseq_to_edgeR
 #'
-#' data.frame to newick function
+#' import a phyloseq object to edgeR 
 #' 
-#'@description from: Martin Turjak
-#'             at: http://stackoverflow.com/questions/15343338/        
+#'@description from phyloseq extension tutorial 
+#'              (http://joey711.github.io/phyloseq-extensions/edgeR.html)
+#' 
+#'@param physeq         phyloseq object
+#'@param group          test variable in metadata
+#'@param method         see documentation
+#'@param ...            see documentation
 #'
-#'@param df   
-#'@param innerlabel     
+#'@return DESeq object
+#'@export
 #'
-#'@return newick string
-#'@keywords internal
-#'
-df2newick <- function(df, innerlabel = FALSE) {
-    # determine root
-    alevel <- as.character(unique(df[ , 1]))
-    newick <- NULL
-    # traverse throug data.frame and create newick string
-    for(x in alevel) newick <- c(newick, traverse(x, 1, innerlabel))
-    # add outer strings
-    (newick <- paste("(", 
-                     paste(newick, collapse = ","), ");", 
-                     sep = ""))
-    return(newick)
+phyloseq_to_edgeR = function(physeq, 
+                             group, 
+                             method = "RLE", 
+                             ...) {
+    # Enforce orientation.
+    if (!taxa_are_rows(physeq)) {
+        physeq <- t(physeq)
+    }
+    x = as(otu_table(physeq), "matrix")
+    
+    # Add one to protect against overflow, log(0) issues.
+    x = x + 1
+    
+    # Check `group` argument
+    if (identical(all.equal(length(group), 1),
+                  TRUE) & nsamples(physeq) > 1) {
+        # Assume that group was a sample variable name 
+        # (must be categorical)
+        group = get_variable(physeq, group)
+    }
+    
+    # Define gene annotations (`genes`) as tax_table
+    taxonomy = tax_table(physeq, errorIfNULL = FALSE)
+    if (!is.null(taxonomy)) {
+        taxonomy = data.frame(as(taxonomy, "matrix"))
+    }
+    
+    # Now turn into a DGEList
+    y = DGEList(counts = x, 
+                group = group, 
+                genes = taxonomy, 
+                remove.zeros = TRUE, 
+                ...)
+    
+    # Calculate the normalization factors
+    z = calcNormFactors(y, method = method)
+    
+    # Check for division by zero inside `calcNormFactors`
+    if (!all(is.finite(z$samples$norm.factors))) {
+        stop("Something wrong with edgeR::calcNormFactors on this data,\n         non-finite $norm.factors, consider changing `method` argument")
+    }
+    
+    # Estimate dispersions
+    return(estimateTagwiseDisp(estimateCommonDisp(z)))
 }
-#' psmelt
-#'
-#' overwrite to fix bug in plot_bar       
-#'
-#'@param physeq phyloseq object       
-#'
-#'@return mdf
-#'@keywords internal
-#'
-psmelt <- function(physeq) 
-{
-    if (!inherits(physeq, "phyloseq")) {
-        rankNames = NULL
-        sampleVars = NULL
-    }
-    else {
-        rankNames = rank_names(physeq, FALSE)
-        sampleVars = sample_variables(physeq, FALSE)
-    }
-    reservedVarnames = c("Sample", "Abundance", "OTU")
-    type1aconflict = intersect(reservedVarnames, sampleVars)
-    if (length(type1aconflict) > 0) {
-        wh1a = which(sampleVars %in% type1aconflict)
-        new1a = paste0("sample_", sampleVars[wh1a])
-        warning("The sample variables: \n", paste(sampleVars[wh1a], 
-                                                  collapse = ", "), "\n have been renamed to: \n", 
-                paste0(new1a, collapse = ", "), "\n", "to avoid conflicts with special phyloseq plot attribute names.")
-        colnames(sample_data(physeq))[wh1a] <- new1a
-    }
-    type1bconflict = intersect(reservedVarnames, rankNames)
-    if (length(type1bconflict) > 0) {
-        wh1b = which(rankNames %in% type1bconflict)
-        new1b = paste0("taxa_", rankNames[wh1b])
-        warning("The rank names: \n", paste(rankNames[wh1b], 
-                                            collapse = ", "), "\n have been renamed to: \n", 
-                paste0(new1b, collapse = ", "), "\n", "to avoid conflicts with special phyloseq plot attribute names.")
-        colnames(tax_table(physeq))[wh1b] <- new1b
-    }
-    type2conflict = intersect(sampleVars, rankNames)
-    if (length(type2conflict) > 0) {
-        wh2 = which(sampleVars %in% type2conflict)
-        new2 = paste0("sample_", sampleVars[wh2])
-        warning("The sample variables: \n", paste0(sampleVars[wh2], 
-                                                   collapse = ", "), "\n have been renamed to: \n", 
-                paste0(new2, collapse = ", "), "\n", "to avoid conflicts with taxonomic rank names.")
-        colnames(sample_data(physeq))[wh2] <- new2
-    }
-    otutab = otu_table(physeq)
-    if (!taxa_are_rows(otutab)) {
-        otutab <- t(otutab)
-    }
-    mdf = melt(as(otutab, "matrix"), value.name = "Abundance")
-    colnames(mdf)[1] <- "OTU"
-    colnames(mdf)[2] <- "Sample"
-    colnames(mdf)[3] <- "Abundance"
-    mdf$OTU <- as.character(mdf$OTU)
-    mdf$Sample <- as.character(mdf$Sample)
 
-    if (!is.null(sampleVars)) {
-        sdf = data.frame(sample_data(physeq), stringsAsFactors = FALSE)
-        sdf$Sample <- sample_names(physeq)
-        mdf <- merge(mdf, sdf, by.x = "Sample")
-    }
-    if (!is.null(rankNames)) {
-        TT = access(physeq, "tax_table")
-        TT <- TT[, which(apply(!apply(TT, 2, is.na), 2, any))]
-        tdf = data.frame(TT, OTU = taxa_names(physeq), stringsAsFactors = FALSE)
-        mdf <- merge(mdf, tdf, by.x = "OTU")
-    }
-    mdf = mdf[order(mdf$Abundance, decreasing = TRUE), ]
-    return(mdf)
-}
+

@@ -1,6 +1,6 @@
 #' plot.rareCurve
 #'
-#' calculate and plor rarefaction curves for phyloseq object
+#' calculate and plot rarefaction curves for phyloseq object
 #'
 #'@description create rarefaction curves for a phyloseq object, 
 #'             where the number of OTUs against the number of 
@@ -104,31 +104,8 @@ plot.rareCurve <- function(phyloseq,
     if(!is.null(file)) ggsave(file)
     return(p)
 }
-#' rarify.phyloseq
-#'
-#' wrapper for the phyloseq::rarefy_even_depth function 
-#' with needed parameters set
-#' 
-#'@param phyloseq   phyloseq object
-#'@param rngseed    random seed set
-#'@param replace    sample with or without replacement
-#'@param trimOTUs   trim OTUs that are no longer observed 
-#'
-#'@return rarified phyloseq object
-#'@keywords internal
-#'
-rarify.phyloseq <- function(phyloseq, 
-                            rngseed = 1234, 
-                            replace = F, 
-                            trimOTUs = T) {
-    
-    return(rarefy_even_depth(phyloseq, 
-                             min(sample_sums(phyloseq)),
-                             rngseed = rngseed, 
-                             replace = replace, 
-                             trimOTUs = trimOTUs, 
-                             verbose = F))
-}
+
+
 #' Rrarefy
 #'
 #' overwritten Rrarefy function from vegan, 
