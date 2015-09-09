@@ -436,4 +436,3 @@ phyloseq_to_edgeR = function(physeq,
     return(estimateTagwiseDisp(estimateCommonDisp(z)))
 }
 
-

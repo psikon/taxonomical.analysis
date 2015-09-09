@@ -7,5 +7,10 @@ registerDoParallel(cores = 20)
 fixInNamespace(psmelt, pos = "package:phyloseq")
 
 
+metadataList <- get.metadata.list()
+bac <- get.bacterialDB(metadataList)
+euk <- get.eukaryotaDB(metadataList)
+biom <- generate.biomFile(file = "data/eukaryotic.biom", euk)
+biom <- generate.biomFile(file = "data/bacterial.biom", bac)
 
 

@@ -2,47 +2,6 @@ source("src/initAnalysis.R")
 # colnames(mdf)[3] <- "Abundance"
 fixInNamespace(psmelt, pos = "package:phyloseq")
 
-#############################################################
-######## Evaluation of different pipeline steps #############
-#############################################################
-
-# plot absolute distribution of taxonomical levels
-plot.taxaResolution(phylo.new,
-                    file = "graphs/evaluation/taxa_res.abs.pdf",
-                    absolute = TRUE, sep = TRUE, 
-                    length_group1 = 5, length_group2 = 7,
-                    title = "Taxonomical Resolution per samples \n(abs)")
-
-# plot realtive distribution of taxonomical levels
-plot.taxaResolution(phylo.new,
-                    file = "graphs/evaluation/taxa_res.perc.pdf",
-                    absolute = FALSE, sep = TRUE, 
-                    length_group1 = 5, length_group2 = 7,
-                    title = "Taxonomical Resolution per samples \n(percent)")
-
-# plot the absolute apperance of specified occurence groups
-plot.groupedAbundance(phylo.new, 
-                      file = "graphs/evaluation/abundance.abs.pdf",
-                      absolute = TRUE, sep = TRUE,
-                      length_group1 = 5, length_group2 = 7,
-                      title = "Abundance in defined groups per sample\n(absolute)")
-
-# plot the relative apperance of specified occurence groups
-plot.groupedAbundance(phylo.new, 
-                      file = "graphs/evaluation/abundance.perc.pdf",
-                      absolute = FALSE, sep = TRUE,
-                      length_group1 = 5, length_group2 = 7,
-                      title = "Abundance in defined groups per sample\n(percent)")
-
-# plot the number of database hits per sample
-plot.DBCount(data = get.DBConnection.new(get.metadata.list()) , 
-             names = c("sample 60", "sample62","sample 64", "sample 66","sample 68", "sample 70", 
-                       "sample 72", "sample 74", "sample 76", "sample 78", 
-                       "sample 80", "sample 82"), 
-             file = "graphs/evaluation/database_counts.pdf",
-             sep = TRUE, length_group1 = 5, length_group2 = 7,
-             title = "Hits in taxonomyReportDB per sample")
-
 #' plot.taxaResolution
 #'
 #' plot the occurences of taxonomical levels per sample 
@@ -222,74 +181,91 @@ plot.groupedAbundance <- function(phyloseq,
     if (!is.null(file)) ggsave(file)
     return(k)
 }
-#' plot.DBCount
-#'
-#' plot the number of hits per sample in taxonomyReportDB object
-#' 
-#'@param data           taxonomyReportDB object
-#'@param names          sample names 
-#'@param file           output file
-#'@param sep            seperate plot by 'HoldingCondition'
-#'@param length_group1  number of free_living samples
-#'@param length_group2  number of mariculture samples
-#'@param title          plot title
-#'
-#'@return ggplot2 object
-#'@export
-#'
-plot.DBCount <- function(data, 
-                         names, 
-                         file = NULL,                                    
-                         sep = TRUE,
-                         length_group1 = 9, 
-                         length_group2 = 12,
-                         title = "Number of Taxonomies") {
-    
-    # get length of taxonomy table per sample
-    res <- sapply(data, function(x) {
-        db_query(conn(x), 
-                 "SELECT COUNT(*) from taxonomy", 1)
-    })
-    
-    # name the rows like the databases
-    names(res) <- names
-    
-    # convert for ggplot2
-    data2 <- melt(res)
-    
-    # insert names
-    data2$name <- rownames(data2)
-    if (sep) {
-        # generate environment seperation for data
-        dest <- factor(c(rep("free living", length_group1),
-                         rep("mariculture", length_group2 )),
-                       levels = c("free living", "mariculture"))
-        df <- cbind(data2, dest)
-    } else {
-        df <- data2
-    }
-    
-    # generate  plot
-    k <- ggplot(df, aes(x = name, y = value, fill= name))
-    # type of plot
-    k <- k + geom_bar(stat = "identity") 
-    # generate seperation
-    if (sep) {
-        # seperate into two windows
-        k <- k + facet_wrap(~dest, scales = "free_x") 
-    } else {
-        k <- k
-    }
-    # adjust rest for plotting
-    k <- k + xlab("\nTaxonomy databases") + ylab("Number of taxonomies") +
-        theme_bw() + 
-        scale_y_continuous(labels = comma, 
-                           breaks = pretty_breaks(n = 15)) +  
-        guides(fill = FALSE) +    
-        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-        ggtitle(title)  
-    
-    # generate plot file
-    if (!is.null(file)) ggsave(file)
-    return(k)
-}
+
+# generate read overview graphics
+require(reshape2)
+require(plyr)
+require(scales)
+
+
+
+RAW <- unique(read.table("data/evaluation/reads-raw.txt", 
+                         header = F, as.is = T)[1])/4
+classify <- unique(read.table("data/evaluation/reads-merged.txt",
+                              header = F, as.is = F)[1])/2
+r1.paired <- unique(read.table("data/evaluation/reads-paired.quality.txt",
+                               header = F, as.is = T)[1])/4
+r1.single <- unique(read.table("data/evaluation/reads-single.quality.txt",
+                               header = F, as.is = T)[1])/4
+
+RAW
+quality <- r1.paired + r1.single
+
+bacteria <- subset_taxa(generate.phyloseq("data/bacterial.biom"), superkingdom == 'k__Bacteria')
+bacteria <- rm.taxa(bacteria, 2)
+eukaryotic <- subset_taxa(generate.phyloseq("data/eukaryotic.biom"), superkingdom == 'k__Eukaryota')
+bacterial <- colSums(otu_table(bacteria))
+eukarotical <- colSums(otu_table(eukaryotic))
+
+mapped <- bacterial + eukarotical
+functional <- c(45488, 243651, 403117, 55133, 53924, 78806, 
+                51673, 162204, 48962, 47896, 51876, 37484) 
+
+func <- functional
+tax <- mapped - func
+qual <- quality[-13, ] - tax
+raw <- RAW[-13, ] - qual
+
+data <- data.frame(raw, qual, tax, func)
+
+
+colnames(data) <- c("RAW", "quality-processed", "taxonomical annotated", "functional annotated")
+rownames(data) <- c("free1", "free2", "free3", "free4", "free5", 
+                    "mari1", "mari2", "mari3", "mari4", "mari5", 
+                    "mari6", "mari7")
+data[,"SampleName"] <- rownames(data)
+
+## reorder the columns
+data <- data[, c("SampleName", "functional annotated",
+                 "taxonomical annotated","quality-processed", "RAW")]
+
+## rename columns
+#names(data) <- c("SampleID", "classified reads",
+#                 "quality-filtered reads", "raw reads")
+## add marginal
+data <- rbind(data, c(SampleName = "Mean", trunc(colMeans(data[, 2:ncol(data)]))))
+data[, 2:ncol(data)] <- lapply(data[, 2:ncol(data)], as.integer)
+## melt
+mcount <- melt(data, id.vars="SampleName", variable.name="Reads", value.name="value")
+colnames(mcount) <- c("SampleName", "Reads", "value")
+
+p <- ggplot(mcount, aes(x = `SampleName`, y = value, fill = Reads)) +
+    geom_bar(stat="identity") + 
+    scale_y_continuous(labels = comma, breaks = pretty_breaks(n=10)) +
+    scale_fill_grey(start = 0.33, end = 0.67) +
+    ylab("Number of reads") +
+    xlab("Samples") +
+    #guides(fill = guide_legend(title = NULL)) +
+    ggtheme_reads +
+    geom_hline(yintercept = sum(subset(mcount, `SampleName` == "Mean", 
+                                       "value", drop = TRUE)),
+               linetype = "dashed", colour = "gray33", size = 1) +
+    geom_hline(yintercept = subset(mcount, `SampleName` == "Mean" &
+                                       Reads == "taxonomical annotated", 
+                                   "value", drop = TRUE) + 
+                            subset(mcount, `SampleName` == "Mean" &
+                              Reads == "functional annotated", 
+                          "value", drop = TRUE),
+               linetype = "dashed", colour = "gray66", size = 1)
+p
+ggsave("graphs/evaluation/read_distribution.pdf", width=6.3, height=4.3)
+
+tiff("graphs/evaluation/read_distribution.tiff", compression = "lzw", ,
+     width = 6.3, height = 4.3, units = "in",res = 600)
+    p
+dev.off()
+
+jpeg("graphs/evaluation/read_distribution.jpg", width = 6.3, 
+     height = 4.3, units = "in", res = 300)
+p
+dev.off()
