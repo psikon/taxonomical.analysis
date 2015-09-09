@@ -1,14 +1,13 @@
 taxonomical.analysis 
 
 This project is part of my PhD thesis consisting of a taxonomical analysis for 
-whole DNA dataset. It is based on a Blast seach improved by taxonomical annotations, 
-provided by metaR and depending packages. 
-
+whole DNA dataset. It is based on a Blast seach improved by taxonomical 
+annotations, provided by metaR and depending packages. 
 
 The project contains functions to convert and import the taxonomical annotated 
 metagenomic data into a phyloseq object, improved by some own developed functions.
 
-The main aim of this project was the elucidation of the microbiome and metagenome 
-of host-associated metagenomic data. 
+The main aim of this project was the elucidation of the microbiome and 
+metagenome of host-associated metagenomic data. 
 
  
